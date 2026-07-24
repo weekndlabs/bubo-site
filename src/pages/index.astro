@@ -9,10 +9,10 @@ const features = [
   { k: 'Top apps',      d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
   { k: 'CPU',           d: 'Overall load, per-core bars, efficiency and performance clusters, average temperature and die hotspot.' },
   { k: 'Memory',        d: 'Used against total, DRAM read and write bandwidth, and a swap warning the moment your Mac starts thrashing.' },
-  { k: 'GPU & fan',     d: 'GPU usage, frequency and power draw. Live fan RPM, hidden automatically on fanless Macs.' },
+  { k: 'GPU & fan',     d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
   { k: 'Battery',       d: 'Charge, drain or charge rate, adapter watts, cycles, health and cell temperature.' },
   { k: 'Network & disk',d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
-  { k: 'Power rails',   d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM — whatever your chip actually exposes.' },
+  { k: 'Power rails',   d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM, whatever your chip exposes.' },
   { k: 'Optimize',      d: 'Purge the disk cache, or quit every heavy app at once, with a confirmation first.' },
 ];
 
@@ -69,7 +69,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         <h1>Catch the app<br />slowing your Mac.</h1>
         <p class="lede">
           Bubo sits in your menu bar and names the process eating your CPU and
-          memory — then quits it in one click. Native Apple Silicon, no daemon,
+          memory, then quits it in one click. Native Apple Silicon, no daemon,
           no sudo, 280&nbsp;KB.
         </p>
 
@@ -126,8 +126,8 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       <p class="band-body">
         A slow Mac is usually one greedy app. Activity Monitor keeps that answer
         behind a window and a dozen columns. Bubo keeps it in the corner of your
-        screen — a dot that turns amber, then red, the moment something starts to
-        drag — and the same click that shows you the culprit shuts it down.
+        screen. The dot turns amber, then red, when something starts to drag, and
+        one click shows you the culprit and quits it.
       </p>
     </section>
 
@@ -178,7 +178,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
 
       <p class="install-note">
         The cask clears the Gatekeeper quarantine flag on install, so Bubo
-        launches straight away. Prefer the manual route? Grab the
+        launches straight away. For the manual route, grab the
         <a href={releases} rel="noopener">.dmg</a>, drag Bubo to Applications,
         then right-click the menu-bar item and turn on <b>Open at Login</b>.
       </p>
