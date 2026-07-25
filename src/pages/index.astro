@@ -1,4 +1,6 @@
 ---
+import Analytics from '@vercel/analytics/astro';
+
 const brew = 'brew install fajarhide/tap/bubo';
 const repo = 'https://github.com/fajarhide/bubo';
 const releases = `${repo}/releases/latest`;
@@ -92,8 +94,8 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         <h1>Catch the app<br />slowing your Mac.</h1>
         <p class="lede">
           Bubo sits in your menu bar and names the process eating your CPU and
-          memory, then quits it in one click. Native Apple Silicon, no daemon,
-          no sudo.
+          memory, then quits it in one click. Native on Apple Silicon and
+          Intel, no daemon, no sudo.
         </p>
 
         <div class="cmd" data-copy={brew}>
@@ -288,8 +290,20 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
 
     /* success button is light-green in both themes, so pin dark ink on it */
     .cmd-btn.is-copied { color: #10261A; }
-    /* the panel recreates Bubo's dark macOS popover: keep it dark in both themes */
-    .panel { color-scheme: dark; }
+
+    /* The hero panel drifts between its dark and light popover looks. Registered
+       color props interpolate, so every child reading these vars fades smoothly. */
+    @property --p-bg    { syntax: '<color>'; inherits: true; initial-value: #1A1D2B; }
+    @property --p-line  { syntax: '<color>'; inherits: true; initial-value: #2A3048; }
+    @property --p-text  { syntax: '<color>'; inherits: true; initial-value: #ECEEF5; }
+    @property --p-muted { syntax: '<color>'; inherits: true; initial-value: #8A90A6; }
+    @property --p-faint { syntax: '<color>'; inherits: true; initial-value: #565D75; }
+    @property --p-track { syntax: '<color>'; inherits: true; initial-value: #2b3147; }
+    @property --p-amber { syntax: '<color>'; inherits: true; initial-value: #F5B841; }
+    @keyframes panelTheme {
+      0%, 42%   { --p-bg: #1A1D2B; --p-line: #2A3048; --p-text: #ECEEF5; --p-muted: #8A90A6; --p-faint: #565D75; --p-track: #2b3147; --p-amber: #F5B841; }
+      58%, 100% { --p-bg: #F4F2EC; --p-line: #DED9CD; --p-text: #1C1E28; --p-muted: #5A5F70; --p-faint: #8A8FA0; --p-track: #E2DED2; --p-amber: #9C6100; }
+    }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -376,7 +390,11 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
 
     .hero-copy { position: relative; z-index: 1; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
     h1 { font-size: clamp(2.6rem, 6.4vw, 4.6rem); line-height: 0.98; font-weight: 800; }
-    .lede { color: var(--muted); font-size: 1.12rem; max-width: 30ch; margin: 1.4rem 0 2rem; }
+    .lede {
+      color: var(--muted); font-size: 1.06rem; line-height: 1.5;
+      max-width: 42ch; margin: 1.2rem 0 1.8rem;
+      text-align: justify; text-align-last: left; hyphens: auto;
+    }
 
     .cmd {
       display: flex; align-items: center; gap: 10px;
@@ -413,12 +431,16 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     /* ---- panel recreation ---- */
     .panel-wrap { position: relative; z-index: 1; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
     .panel {
-      background: linear-gradient(180deg, #1b2030, #14172250);
-      background-color: var(--night-2);
+      /* alias the panel's tokens to the animated props; children fade with them */
+      --night-2: var(--p-bg); --line: var(--p-line); --text: var(--p-text);
+      --muted: var(--p-muted); --faint: var(--p-faint); --amber: var(--p-amber);
+      color: var(--text);
+      background: var(--p-bg);
       border: 1px solid var(--line);
       border-radius: 18px; padding: 18px;
       box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(245, 184, 65, 0.04);
       max-width: 360px; margin-left: auto;
+      animation: panelTheme 12s ease-in-out infinite;
     }
     .p-head { display: flex; align-items: baseline; justify-content: space-between; }
     .p-title { font-family: var(--display); font-weight: 700; font-size: 1.05rem; }
@@ -438,7 +460,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     }
     .p-row-label b { font-family: var(--mono); font-size: 1.05rem; font-weight: 600; }
 
-    .bar { height: 7px; border-radius: 6px; background: #2b3147; margin-top: 7px; overflow: hidden; }
+    .bar { height: 7px; border-radius: 6px; background: var(--p-track); margin-top: 7px; overflow: hidden; }
     .bar i { display: block; height: 100%; border-radius: 6px; }
     .fill-sage { background: var(--sage); }
     .fill-amber { background: var(--amber); }
@@ -448,7 +470,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .clay { color: var(--clay); }
 
     .cores { display: flex; gap: 4px; align-items: flex-end; height: 22px; margin-top: 8px; }
-    .core { flex: 1; height: 100%; background: #2b3147; border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; }
+    .core { flex: 1; height: 100%; background: var(--p-track); border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; }
     .core i { width: 100%; border-radius: 4px; }
 
     .p-apps-head {
@@ -587,5 +609,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto; }
     }
   </style>
+
+  <Analytics />
 </body>
 </html>
