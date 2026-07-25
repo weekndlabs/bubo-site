@@ -12,19 +12,20 @@ const dmgArm = `${repo}/releases/latest/download/Bubo-apple-silicon.dmg`;
 const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 
 // The real sections of the app, used verbatim as the feature list.
+// arch: 'all' runs on Intel too; 'as' needs the private Apple Silicon sensors.
 const features = [
-  { k: 'Top apps',      d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
-  { k: 'CPU',           d: 'Overall load, per-core bars, efficiency and performance clusters, average temperature and die hotspot.' },
-  { k: 'Memory',        d: 'Used against total, DRAM read and write bandwidth, and a swap warning the moment your Mac starts thrashing.' },
-  { k: 'GPU & fan',     d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
-  { k: 'Battery',       d: 'Charge, drain or charge rate, adapter watts, cycles, health and cell temperature.' },
-  { k: 'Network & disk',d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
-  { k: 'Power rails',   d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM, whatever your chip exposes.' },
-  { k: 'Optimize',      d: 'Purge the disk cache, or quit every heavy app at once, with a confirmation first.' },
+  { k: 'Top apps',      arch: 'all', d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
+  { k: 'CPU',           arch: 'all', d: 'Overall load, per-core bars, efficiency and performance clusters, average temperature and die hotspot.' },
+  { k: 'Memory',        arch: 'all', d: 'Used against total, DRAM read and write bandwidth, and a swap warning the moment your Mac starts thrashing.' },
+  { k: 'GPU & fan',     arch: 'as',  d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
+  { k: 'Battery',       arch: 'all', d: 'Charge, drain or charge rate, adapter watts, cycles, health and cell temperature.' },
+  { k: 'Network & disk',arch: 'all', d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
+  { k: 'Power rails',   arch: 'as',  d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM, whatever your chip exposes.' },
+  { k: 'Optimize',      arch: 'all', d: 'Purge the disk cache, or quit every heavy app at once, with a confirmation first.' },
 ];
 
 const specs = [
-  { v: 'Apple Silicon', l: 'native, M1 through M5' },
+  { v: 'Universal',     l: 'Apple Silicon and Intel' },
   { v: 'Tiny',          l: 'a lean native binary' },
   { v: 'No daemon',     l: 'nothing runs in the background' },
   { v: 'No sudo',       l: 'no root, no kernel extension' },
@@ -166,6 +167,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       <div class="grid">
         {features.map((f) => (
           <article class="card">
+            <span class={`card-arch card-arch--${f.arch}`}>{f.arch === 'as' ? 'M-series' : 'All Macs'}</span>
             <h3>{f.k}</h3>
             <p>{f.d}</p>
           </article>
@@ -429,7 +431,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .dl-hint { font-family: var(--mono); font-size: 0.74rem; color: var(--faint); margin: 10px 0 0; }
 
     /* ---- panel recreation ---- */
-    .panel-wrap { position: relative; z-index: 1; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
+    .panel-wrap { position: relative; z-index: 1; min-width: 0; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
     .panel {
       /* alias the panel's tokens to the animated props; children fade with them */
       --night-2: var(--p-bg); --line: var(--p-line); --text: var(--p-text);
@@ -439,7 +441,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       border: 1px solid var(--line);
       border-radius: 18px; padding: 18px;
       box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(245, 184, 65, 0.04);
-      max-width: 360px; margin-left: auto;
+      max-width: min(360px, 100%); margin-left: auto;
       animation: panelTheme 12s ease-in-out infinite;
     }
     .p-head { display: flex; align-items: baseline; justify-content: space-between; }
@@ -506,6 +508,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .sec-head h2 { font-size: clamp(1.8rem, 4.2vw, 2.8rem); line-height: 1.05; }
     .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .card {
+      position: relative;
       background: var(--card); border: 1px solid var(--line-soft);
       border-radius: 14px; padding: 22px 20px 24px;
       transition: border-color 0.2s, transform 0.2s;
@@ -514,8 +517,17 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .card h3 {
       font-family: var(--mono); font-size: 0.82rem; font-weight: 600;
       letter-spacing: 0.02em; color: var(--amber); margin-bottom: 10px;
+      padding-right: 66px;
     }
     .card p { color: var(--muted); font-size: 0.95rem; line-height: 1.55; margin: 0; }
+    .card-arch {
+      position: absolute; top: 15px; right: 14px;
+      font-family: var(--mono); font-size: 0.5rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 20px; white-space: nowrap;
+    }
+    .card-arch--all { color: var(--faint); background: rgba(138, 144, 166, 0.12); }
+    .card-arch--as  { color: var(--amber); background: rgba(245, 184, 65, 0.13); }
 
     /* ---- specs ---- */
     .specs {
@@ -596,6 +608,9 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       .cmd code { white-space: normal; overflow: visible; text-overflow: clip; word-break: break-word; flex-basis: 100%; }
       .cmd-btn { flex: 1; }
       .grid { grid-template-columns: 1fr; }
+      /* stack the download buttons full-width so they don't wrap ragged */
+      .dl-row { flex-direction: column; align-items: stretch; }
+      .dl-row .btn-dl { text-align: center; }
       .spec-row { grid-template-columns: repeat(2, 1fr); }
       .spec { border-right: 1px solid var(--line-soft); }
       .spec:nth-child(2n) { border-right: 0; }
