@@ -19,8 +19,8 @@
   body {
     background: radial-gradient(120% 140% at 18% 30%, #1b2033 0%, var(--night) 55%);
     color: var(--text); font-family: var(--display); overflow: hidden;
-    display: grid; grid-template-columns: 1fr 430px; align-items: center;
-    padding: 68px; position: relative;
+    display: grid; grid-template-columns: 1fr 430px; align-items: end; gap: 60px;
+    padding: 64px 68px; position: relative;
   }
   /* the owl's eyes, watching from the dark */
   .eye { position: absolute; width: 300px; height: 300px; border-radius: 50%;
@@ -34,11 +34,14 @@
   .eyebrow { font-family: var(--mono); font-size: 15px; letter-spacing: 0.22em;
     text-transform: uppercase; color: var(--amber); margin-bottom: 20px; }
   h1 { font-size: 68px; line-height: 0.98; font-weight: 800; letter-spacing: -0.02em; max-width: 12ch; }
-  .cmd { margin-top: 34px; font-family: var(--mono); font-size: 20px;
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--night-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 20px; }
+  .cmd { margin-top: 32px; font-family: var(--mono); font-size: 17px;
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--night-2); border: 1px solid var(--line); border-radius: 11px; padding: 11px 16px; }
   .cmd .p { color: var(--amber); }
-  .url { margin-top: 22px; font-family: var(--mono); font-size: 16px; color: var(--faint); }
+  .dl { margin-top: 16px; display: flex; gap: 8px; font-family: var(--mono); font-size: 14px; }
+  .pill { background: rgba(255,255,255,0.055); border-radius: 7px; padding: 6px 12px; color: var(--muted); }
+  .hint { margin-top: 14px; font-family: var(--mono); font-size: 15px; color: var(--muted); }
+  .url { margin-top: 18px; font-family: var(--mono); font-size: 16px; color: var(--faint); }
 
   /* the panel snippet: the culprit caught red-handed */
   .panel { position: relative; z-index: 2; background: var(--night-2);
@@ -75,7 +78,8 @@
     <div class="eyebrow">macOS menu-bar monitor</div>
     <h1>Catch the app slowing your Mac.</h1>
     <div class="cmd"><span class="p">$</span> brew install fajarhide/tap/bubo</div>
-    <div class="url">bubo.weekndlabs.com</div>
+    <div class="dl"><span class="pill">Apple Silicon</span><span class="pill">Intel Chip</span></div>
+    <div class="hint">Apple Silicon for M1 through M5. Intel for older Macs.</div>
   </div>
 
   <div class="panel">
