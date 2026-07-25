@@ -103,7 +103,6 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         <div class="hero-actions">
           <a class="btn-ghost" href={dmgArm} download rel="noopener">Apple&nbsp;Silicon <span class="dl-ext">.dmg · M1–M5</span></a>
           <a class="btn-ghost" href={dmgIntel} download rel="noopener">Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
-          <span class="hero-meta">macOS&nbsp;13+ · MIT</span>
         </div>
       </div>
 
@@ -398,14 +397,15 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .cmd-btn:active { transform: translateY(1px); }
     .cmd-btn.is-copied { background: var(--sage); }
 
-    .hero-actions { display: flex; align-items: center; gap: 18px; margin-top: 18px; flex-wrap: wrap; }
+    /* match the brew box width above; two equal buttons that stack on narrow screens */
+    .hero-actions { display: flex; gap: 10px; margin-top: 12px; max-width: 440px; flex-wrap: wrap; }
     .btn-ghost {
+      flex: 1 1 170px; text-align: center;
       font-family: var(--mono); font-size: 0.82rem; text-decoration: none;
       color: var(--text); border: 1px solid var(--line);
       border-radius: 9px; padding: 10px 16px; transition: border-color 0.18s, color 0.18s;
     }
     .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
-    .hero-meta { font-family: var(--mono); font-size: 0.74rem; color: var(--faint); }
 
     /* ---- panel recreation ---- */
     .panel-wrap { position: relative; z-index: 1; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
