@@ -157,7 +157,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       </div>
     </section>
 
-    <!-- Problem → answer -->
+    <!-- Problem → answer, shown in the real app -->
     <section class="band">
       <p class="band-eyebrow">the difference</p>
       <h2>Activity Monitor makes you go looking.<br /><em>Bubo just tells you.</em></h2>
@@ -167,14 +167,6 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         screen. The dot turns amber, then red, when something starts to drag, and
         one click shows you the culprit and quits it.
       </p>
-    </section>
-
-    <!-- Demo: the real app in the menu bar -->
-    <section class="demo-sec">
-      <div class="sec-head demo-head">
-        <p class="eyebrow">see it work</p>
-        <h2>One glance, then one click.</h2>
-      </div>
       <figure class="demo-frame">
         <video
           class="demo-video"
@@ -184,6 +176,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         >
           <source src="/demo.mp4" type="video/mp4" />
         </video>
+        <figcaption>One glance, then one click.</figcaption>
       </figure>
     </section>
 
@@ -558,16 +551,18 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .band h2 { font-size: clamp(1.9rem, 4.6vw, 3.1rem); line-height: 1.05; margin-bottom: 1.4rem; }
     .band-body { color: var(--muted); font-size: 1.1rem; max-width: 60ch; margin: 0 auto; }
 
-    /* ---- demo video ---- */
-    .demo-sec { max-width: var(--wrap); margin: 0 auto; padding: clamp(8px, 2vw, 24px) clamp(20px, 5vw, 40px) clamp(40px, 7vw, 80px); }
-    .demo-head { text-align: center; margin-bottom: clamp(24px, 3vw, 40px); }
+    /* ---- demo video (inside the band) ---- */
     .demo-frame {
-      margin: 0 auto; max-width: 940px;
+      margin: clamp(32px, 5vw, 56px) auto 0; max-width: 100%;
       border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
       background: var(--night-2);
       box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(245, 184, 65, 0.04);
     }
     .demo-video { display: block; width: 100%; height: auto; }
+    .demo-frame figcaption {
+      font-family: var(--mono); font-size: 0.74rem; color: var(--faint);
+      padding: 12px; border-top: 1px solid var(--line-soft); background: var(--night-2);
+    }
 
     /* ---- faq ---- */
     .faq { max-width: 760px; margin: 0 auto; padding: clamp(24px, 4vw, 40px) clamp(20px, 5vw, 40px) clamp(48px, 8vw, 88px); }
