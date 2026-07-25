@@ -101,9 +101,10 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         </div>
 
         <div class="hero-actions">
-          <a class="btn-ghost" href={dmgArm} download rel="noopener">Apple&nbsp;Silicon <span class="dl-ext">.dmg · M1–M5</span></a>
+          <a class="btn-ghost" href={dmgArm} download rel="noopener">Apple&nbsp;Silicon <span class="dl-ext">.dmg</span></a>
           <a class="btn-ghost" href={dmgIntel} download rel="noopener">Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
         </div>
+        <p class="dl-hint">Apple Silicon for M1 through M5. Intel for older Macs.</p>
       </div>
 
       <!-- Signature: a working recreation of the Bubo panel, culprit in red. -->
@@ -406,6 +407,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       border-radius: 9px; padding: 10px 16px; transition: border-color 0.18s, color 0.18s;
     }
     .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+    .dl-hint { font-family: var(--mono); font-size: 0.74rem; color: var(--faint); margin: 10px 0 0; }
 
     /* ---- panel recreation ---- */
     .panel-wrap { position: relative; z-index: 1; animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
