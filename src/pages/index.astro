@@ -4,6 +4,11 @@ const repo = 'https://github.com/fajarhide/bubo';
 const releases = `${repo}/releases/latest`;
 const tap = 'https://github.com/fajarhide/homebrew-tap';
 
+// Direct .dmg links: /latest/download/ serves the file straight away and always
+// tracks the newest release, so these never need bumping per version.
+const dmgArm = `${repo}/releases/latest/download/Bubo-apple-silicon.dmg`;
+const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
+
 // The real sections of the app, used verbatim as the feature list.
 const features = [
   { k: 'Top apps',      d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
@@ -18,7 +23,7 @@ const features = [
 
 const specs = [
   { v: 'Apple Silicon', l: 'native, M1 through M5' },
-  { v: '~280 KB',       l: 'the whole download' },
+  { v: 'Tiny',          l: 'a lean native binary' },
   { v: 'No daemon',     l: 'nothing runs in the background' },
   { v: 'No sudo',       l: 'no root, no kernel extension' },
   { v: 'One click',     l: 'to quit the heavy app' },
@@ -35,7 +40,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bubo — catch the app slowing your Mac</title>
-  <meta name="description" content="A tiny macOS menu-bar monitor that names the app eating your CPU and memory, then quits it in one click. Native Apple Silicon, no daemon, 280 KB." />
+  <meta name="description" content="A tiny macOS menu-bar monitor that names the app eating your CPU and memory, then quits it in one click. Native Apple Silicon, no daemon, no sudo." />
   <link rel="icon" type="image/png" href="/logo.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bubo.weekndlabs.com/" />
@@ -50,10 +55,16 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
   <meta name="twitter:title" content="Bubo — catch the app slowing your Mac" />
   <meta name="twitter:description" content="A tiny macOS menu-bar monitor that names the heavy app and quits it in one click." />
   <meta name="twitter:image" content="https://bubo.weekndlabs.com/og.png" />
-  <meta name="theme-color" content="#12141F" />
+  <meta name="theme-color" content="#12141F" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Apply the saved theme before paint so there's no flash of the wrong one. -->
+  <script is:inline>
+    const t = localStorage.getItem('bubo-theme');
+    if (t) document.documentElement.style.colorScheme = t;
+  </script>
 </head>
 <body>
   <!-- The site's chrome is a macOS menu bar, because that is where Bubo lives. -->
@@ -66,6 +77,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       <a href="#features">Features</a>
       <a href="#install">Install</a>
       <a href={repo} rel="noopener">GitHub ↗</a>
+      <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
 
@@ -80,7 +92,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         <p class="lede">
           Bubo sits in your menu bar and names the process eating your CPU and
           memory, then quits it in one click. Native Apple Silicon, no daemon,
-          no sudo, 280&nbsp;KB.
+          no sudo.
         </p>
 
         <div class="cmd" data-copy={brew}>
@@ -89,8 +101,9 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
         </div>
 
         <div class="hero-actions">
-          <a class="btn-ghost" href={releases} rel="noopener">Download&nbsp;.dmg</a>
-          <span class="hero-meta">macOS&nbsp;13+ · Apple&nbsp;Silicon · MIT</span>
+          <a class="btn-ghost" href={dmgArm} download rel="noopener">Apple&nbsp;Silicon <span class="dl-ext">.dmg · M1–M5</span></a>
+          <a class="btn-ghost" href={dmgIntel} download rel="noopener">Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
+          <span class="hero-meta">macOS&nbsp;13+ · MIT</span>
         </div>
       </div>
 
@@ -177,20 +190,22 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     <!-- Install -->
     <section class="install" id="install">
       <div class="sec-head">
-        <p class="eyebrow">install</p>
-        <h2>One line, and it's watching.</h2>
+        <p class="eyebrow">get bubo</p>
+        <h2>Put it in your menu bar.</h2>
       </div>
 
-      <div class="cmd cmd-big" data-copy={brew}>
-        <code><span class="cmd-prompt">$</span> {brew}</code>
-        <button class="cmd-btn" type="button" aria-label="Copy install command">Copy</button>
+      <div class="dl-row">
+        <a class="btn-dl" href={dmgArm} download rel="noopener">
+          Apple&nbsp;Silicon <span class="dl-ext">.dmg · M1–M5</span>
+        </a>
+        <a class="btn-dl btn-dl-alt" href={dmgIntel} download rel="noopener">
+          Intel&nbsp;Chip <span class="dl-ext">.dmg</span>
+        </a>
       </div>
 
       <p class="install-note">
-        The cask clears the Gatekeeper quarantine flag on install, so Bubo
-        launches straight away. For the manual route, grab the
-        <a href={releases} rel="noopener">.dmg</a>, drag Bubo to Applications,
-        then right-click the menu-bar item and turn on <b>Open at Login</b>.
+        The Homebrew cask clears the Gatekeeper quarantine flag, so Bubo
+        launches straight away. From the .dmg, drag Bubo to Applications and open it.
       </p>
     </section>
   </main>
@@ -212,6 +227,24 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
   </footer>
 
   <script>
+    // Theme toggle: flip color-scheme on <html> and remember it. Until clicked,
+    // nothing is stored and the page follows the OS via `color-scheme: light dark`.
+    (() => {
+      const root = document.documentElement;
+      const btn = document.querySelector('.mb-theme');
+      const media = matchMedia('(prefers-color-scheme: dark)');
+      const current = () => localStorage.getItem('bubo-theme') || (media.matches ? 'dark' : 'light');
+      const paint = () => { btn.textContent = current() === 'dark' ? '☾' : '☀'; };
+      paint();
+      media.addEventListener('change', paint);
+      btn?.addEventListener('click', () => {
+        const next = current() === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('bubo-theme', next);
+        root.style.colorScheme = next;
+        paint();
+      });
+    })();
+
     // Copy the install command; the button reports success in its own label.
     document.querySelectorAll('.cmd').forEach((box) => {
       const btn = box.querySelector('.cmd-btn');
@@ -229,24 +262,33 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
   </script>
 
   <style is:global>
+    /* Each token carries both themes via light-dark(); color-scheme picks one.
+       Default `light dark` follows the OS, and the toggle overrides it by setting
+       color-scheme on <html>. Amber deepens in light so it holds as text on paper. */
     :root {
-      --night: #12141F;
-      --night-2: #1A1D2B;
-      --card: #1E2333;
-      --line: #2A3048;
-      --line-soft: #21273a;
-      --amber: #F5B841;
-      --amber-bright: #FCD670;
+      color-scheme: light dark;
+      --night: light-dark(#FAF8F3, #12141F);
+      --night-2: light-dark(#F0ECE2, #1A1D2B);
+      --card: light-dark(#F4F0E7, #1E2333);
+      --line: light-dark(#D8D1C0, #2A3048);
+      --line-soft: light-dark(#E4DECF, #21273a);
+      --amber: light-dark(#9C6100, #F5B841);
+      --amber-bright: light-dark(#B87400, #FCD670);
       --sage: #6BCC8F;
       --clay: #E0776F;
-      --text: #ECEEF5;
-      --muted: #8A90A6;
-      --faint: #565D75;
+      --text: light-dark(#1C1E28, #ECEEF5);
+      --muted: light-dark(#5A5F70, #8A90A6);
+      --faint: light-dark(#787E90, #565D75);
       --display: 'Bricolage Grotesque', system-ui, sans-serif;
       --body: 'Inter', system-ui, sans-serif;
       --mono: 'JetBrains Mono', ui-monospace, monospace;
       --wrap: 1120px;
     }
+
+    /* success button is light-green in both themes, so pin dark ink on it */
+    .cmd-btn.is-copied { color: #10261A; }
+    /* the panel recreates Bubo's dark macOS popover: keep it dark in both themes */
+    .panel { color-scheme: dark; }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -279,7 +321,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       position: sticky; top: 0; z-index: 50;
       display: flex; align-items: center; justify-content: space-between;
       height: 34px; padding: 0 clamp(14px, 4vw, 40px);
-      background: rgba(18, 20, 31, 0.72);
+      background: light-dark(rgba(250, 248, 243, 0.72), rgba(18, 20, 31, 0.72));
       backdrop-filter: saturate(140%) blur(14px);
       -webkit-backdrop-filter: saturate(140%) blur(14px);
       border-bottom: 1px solid var(--line-soft);
@@ -299,6 +341,12 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       color: var(--muted); transition: color 0.18s;
     }
     .mb-nav a:hover { color: var(--amber); }
+    .mb-theme {
+      font-family: var(--mono); font-size: 0.9rem; line-height: 1;
+      background: none; border: 0; padding: 0; cursor: pointer;
+      color: var(--muted); transition: color 0.18s;
+    }
+    .mb-theme:hover { color: var(--amber); }
 
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(245, 184, 65, 0.45); }
@@ -469,6 +517,19 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .install .sec-head .eyebrow { text-align: center; }
     .cmd-big { max-width: 520px; margin: 0 auto; padding: 16px 16px 16px 20px; }
     .cmd-big code { font-size: 1rem; }
+    .dl-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-dl {
+      display: inline-block; font-family: var(--mono); font-size: 0.9rem;
+      text-decoration: none; color: var(--night); background: var(--amber);
+      border: 1px solid transparent;
+      border-radius: 10px; padding: 13px 22px; transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.1s;
+    }
+    .btn-dl:hover { background: var(--amber-bright); }
+    .btn-dl:active { transform: translateY(1px); }
+    .dl-ext { font-size: 0.78em; opacity: 0.7; }
+    /* Intel is the secondary arch: ghost button so Apple Silicon reads as primary. */
+    .btn-dl-alt { background: none; color: var(--text); border-color: var(--line); }
+    .btn-dl-alt:hover { background: none; border-color: var(--amber); color: var(--amber); }
     .install-note { color: var(--muted); font-size: 0.98rem; margin: 24px auto 0; max-width: 54ch; }
     .install-note a { color: var(--amber); text-decoration: none; border-bottom: 1px solid rgba(245,184,65,0.3); }
     .install-note b { color: var(--text); font-weight: 600; }
