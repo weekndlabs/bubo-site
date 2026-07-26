@@ -14,8 +14,8 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 // arch: 'all' runs on Intel too; 'as' needs the private Apple Silicon sensors.
 const features = [
   { k: 'Top apps',      arch: 'all', d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
-  { k: 'CPU',           arch: 'all', d: 'Overall load, per-core bars, efficiency and performance clusters, average temperature and die hotspot.' },
-  { k: 'Memory',        arch: 'all', d: 'Used against total, DRAM read and write bandwidth, and a swap warning the moment your Mac starts thrashing.' },
+  { k: 'CPU',           arch: 'all', d: 'Overall load, with efficiency and performance cores spelled out on their own rows. Temperature, hotspot and pressure sit under the bar, and the badge says throttling in plain words when it gets hot.' },
+  { k: 'Memory',        arch: 'all', d: 'Used against total, broken into app, wired, compressed, cached and free, so you see what your RAM is actually spent on. DRAM bandwidth too, and a swap warning when it starts thrashing.' },
   { k: 'GPU & fan',     arch: 'as',  d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
   { k: 'Battery',       arch: 'all', d: 'Charge, drain or charge rate, adapter watts, cycles, health and cell temperature.' },
   { k: 'Network & disk',arch: 'all', d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
@@ -43,8 +43,9 @@ const faqs = [
     a: 'Apple Silicon (M1–M5) for the full panel. Intel for the essentials: CPU, memory, top apps, battery, network and disk. Both follow your system light and dark.' },
 ];
 
-// The eight cores in the hero panel: efficiency cluster busy, performance idle-ish.
-const cores = [78, 64, 55, 40, 88, 72, 30, 22];
+// Hero panel core tiers. v1.2 names them in full instead of E / P, one row each.
+const eCores = [78, 64, 55, 40];
+const pCores = [34, 26, 20, 15];
 ---
 
 <!doctype html>
@@ -126,21 +127,44 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
       <div class="panel-wrap">
         <div class="panel" role="img" aria-label="The Bubo panel, showing Google Chrome as the heaviest app at 128 percent CPU">
           <div class="p-head">
-            <div class="p-title">Bubo <span class="p-ver">1.0</span></div>
+            <div class="p-title">Bubo <span class="p-ver">1.2</span></div>
             <div class="p-badge">BUSY&nbsp;·&nbsp;RAM 78%</div>
           </div>
           <div class="p-sub">M1 · 8 cores</div>
 
           <div class="p-row-label"><span>CPU</span><b class="sage">22%</b></div>
           <div class="bar"><i style="width:22%" class="fill-sage"></i></div>
-          <div class="cores">
-            {cores.map((c) => (
-              <span class="core"><i style={`height:${Math.max(12, c)}%`} class={c >= 80 ? 'fill-amber' : 'fill-sage'}></i></span>
-            ))}
+          <div class="p-temps"><span>temp 44°</span><span>hotspot 52°</span><span>pressure nominal</span></div>
+          <div class="tier">
+            <span class="tier-k">efficiency</span>
+            <div class="cores">
+              {eCores.map((c) => (
+                <span class="core"><i style={`height:${Math.max(14, c)}%`} class="fill-sage"></i></span>
+              ))}
+            </div>
+          </div>
+          <div class="tier">
+            <span class="tier-k">performance</span>
+            <div class="cores">
+              {pCores.map((c) => (
+                <span class="core"><i style={`height:${Math.max(14, c)}%`} class="fill-sage"></i></span>
+              ))}
+            </div>
           </div>
 
           <div class="p-row-label mt"><span>MEMORY</span><b class="amber">6.0 / 8 GB</b></div>
-          <div class="bar"><i style="width:78%" class="fill-amber"></i></div>
+          <div class="bar bar-seg">
+            <i class="seg-app" style="width:51%"></i>
+            <i class="seg-wired" style="width:15%"></i>
+            <i class="seg-comp" style="width:9%"></i>
+            <i class="seg-cache" style="width:17%"></i>
+          </div>
+          <div class="mem-legend">
+            <span><i class="dot-app"></i>app 4.1</span>
+            <span><i class="dot-wired"></i>wired 1.2</span>
+            <span><i class="dot-comp"></i>compressed 0.7</span>
+            <span><i class="dot-cache"></i>cached 1.4</span>
+          </div>
 
           <div class="p-apps-head"><span>TOP APPS</span><span class="p-cols">PROC&nbsp;&nbsp;CPU&nbsp;&nbsp;&nbsp;MEM</span></div>
           <div class="app culprit">
@@ -523,6 +547,36 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     .cores { display: flex; gap: 4px; align-items: flex-end; height: 22px; margin-top: 8px; }
     .core { flex: 1; height: 100%; background: var(--p-track); border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; }
     .core i { width: 100%; border-radius: 4px; }
+
+    /* v1.2: temps under the CPU bar, and core tiers named in full, one row each */
+    .p-temps {
+      display: flex; gap: 14px; margin-top: 7px;
+      font-family: var(--mono); font-size: 0.58rem; color: var(--faint);
+    }
+    .tier { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .tier-k {
+      flex: 0 0 74px; font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint);
+    }
+    .tier .cores { flex: 1; height: 16px; margin-top: 0; }
+
+    /* v1.2: memory used bar broken into app / wired / compressed / cached / free */
+    .bar-seg { display: flex; }
+    .bar-seg i { height: 100%; }
+    .seg-app { background: var(--amber); }
+    .seg-wired { background: var(--clay); }
+    .seg-comp { background: color-mix(in srgb, var(--amber) 55%, var(--p-track)); }
+    .seg-cache { background: var(--sage); }
+    .mem-legend {
+      display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px;
+      font-family: var(--mono); font-size: 0.56rem; color: var(--faint);
+    }
+    .mem-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .mem-legend i { width: 7px; height: 7px; border-radius: 2px; }
+    .dot-app { background: var(--amber); }
+    .dot-wired { background: var(--clay); }
+    .dot-comp { background: color-mix(in srgb, var(--amber) 55%, var(--p-track)); }
+    .dot-cache { background: var(--sage); }
 
     .p-apps-head {
       display: flex; justify-content: space-between; margin: 18px 0 4px;
