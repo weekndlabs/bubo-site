@@ -350,10 +350,10 @@ const pCores = [34, 26, 20, 15];
       --card: light-dark(#F4F0E7, #1E2333);
       --line: light-dark(#D8D1C0, #2A3048);
       --line-soft: light-dark(#E4DECF, #21273a);
-      --amber: light-dark(#9C6100, #F5B841);
+      --amber: light-dark(#975E00, #F5B841);
       --amber-bright: light-dark(#B87400, #FCD670);
-      --sage: #6BCC8F;
-      --clay: #E0776F;
+      --sage: light-dark(#2A6B41, #6BCC8F);
+      --clay: light-dark(#9B3E37, #E0776F);
       --text: light-dark(#1C1E28, #ECEEF5);
       --muted: light-dark(#5A5F70, #8A90A6);
       --faint: light-dark(#787E90, #565D75);
@@ -363,7 +363,8 @@ const pCores = [34, 26, 20, 15];
       --wrap: 1120px;
     }
 
-    /* success button is light-green in both themes, so pin dark ink on it */
+    /* success button keeps its light-green fill in both themes, so both halves are
+       pinned: --sage darkens in light mode and would leave dark ink on dark green. */
     .cmd-btn.is-copied { color: #10261A; }
 
     /* The hero panel drifts between its dark and light popover looks. Registered
@@ -375,9 +376,11 @@ const pCores = [34, 26, 20, 15];
     @property --p-faint { syntax: '<color>'; inherits: true; initial-value: #565D75; }
     @property --p-track { syntax: '<color>'; inherits: true; initial-value: #2b3147; }
     @property --p-amber { syntax: '<color>'; inherits: true; initial-value: #F5B841; }
+    @property --p-sage  { syntax: '<color>'; inherits: true; initial-value: #6BCC8F; }
+    @property --p-clay  { syntax: '<color>'; inherits: true; initial-value: #E0776F; }
     @keyframes panelTheme {
-      0%, 42%   { --p-bg: #1A1D2B; --p-line: #2A3048; --p-text: #ECEEF5; --p-muted: #8A90A6; --p-faint: #565D75; --p-track: #2b3147; --p-amber: #F5B841; }
-      58%, 100% { --p-bg: #F4F2EC; --p-line: #DED9CD; --p-text: #1C1E28; --p-muted: #5A5F70; --p-faint: #8A8FA0; --p-track: #E2DED2; --p-amber: #9C6100; }
+      0%, 42%   { --p-bg: #1A1D2B; --p-line: #2A3048; --p-text: #ECEEF5; --p-muted: #8A90A6; --p-faint: #565D75; --p-track: #2b3147; --p-amber: #F5B841; --p-sage: #6BCC8F; --p-clay: #E0776F; }
+      58%, 100% { --p-bg: #F4F2EC; --p-line: #DED9CD; --p-text: #1C1E28; --p-muted: #5A5F70; --p-faint: #8A8FA0; --p-track: #E2DED2; --p-amber: #975E00; --p-sage: #2A6B41; --p-clay: #9B3E37; }
     }
 
     * { box-sizing: border-box; }
@@ -490,7 +493,7 @@ const pCores = [34, 26, 20, 15];
     }
     .cmd-btn:hover { background: var(--amber-bright); }
     .cmd-btn:active { transform: translateY(1px); }
-    .cmd-btn.is-copied { background: var(--sage); }
+    .cmd-btn.is-copied { background: #6BCC8F; }
 
     /* match the brew box width above; two equal buttons that stack on narrow screens */
     .hero-actions { display: flex; gap: 10px; margin-top: 12px; max-width: 440px; flex-wrap: wrap; }
@@ -509,6 +512,7 @@ const pCores = [34, 26, 20, 15];
       /* alias the panel's tokens to the animated props; children fade with them */
       --night-2: var(--p-bg); --line: var(--p-line); --text: var(--p-text);
       --muted: var(--p-muted); --faint: var(--p-faint); --amber: var(--p-amber);
+      --sage: var(--p-sage); --clay: var(--p-clay);
       color: var(--text);
       background: var(--p-bg);
       border: 1px solid var(--line);
