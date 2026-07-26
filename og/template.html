@@ -61,6 +61,15 @@
   .bar i { display: block; height: 100%; border-radius: 6px; }
   .sage { color: var(--sage); } .amber { color: var(--amber); } .clay { color: var(--clay); }
   .fill-sage { background: var(--sage); } .fill-amber { background: var(--amber); }
+  /* v1.2: temps under the CPU bar, memory used bar broken into segments */
+  .p-temps { display: flex; gap: 16px; margin-top: 9px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .bar-seg { display: flex; }
+  .bar-seg i { height: 100%; border-radius: 0; }
+  .seg-app { background: var(--amber); } .seg-wired { background: var(--clay); }
+  .seg-comp { background: #B98A3A; } .seg-cache { background: var(--sage); }
+  .legend { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 11px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 9px; height: 9px; border-radius: 2px; }
   .apps { margin-top: 22px; font-family: var(--mono); font-size: 15px; }
   .app { display: grid; grid-template-columns: 1fr auto 22px; align-items: center; gap: 12px;
     padding: 8px 10px; border-radius: 8px; }
@@ -84,16 +93,28 @@
 
   <div class="panel">
     <div class="p-head">
-      <div class="p-title">Bubo <span class="p-ver">1.0</span></div>
+      <div class="p-title">Bubo <span class="p-ver">1.2</span></div>
       <div class="p-badge">BUSY · RAM 78%</div>
     </div>
     <div class="p-sub">M1 · 8 cores</div>
 
     <div class="lab"><span>CPU</span><b class="sage">22%</b></div>
     <div class="bar"><i class="fill-sage" style="width:22%"></i></div>
+    <div class="p-temps"><span>temp 44°</span><span>hotspot 52°</span><span>pressure nominal</span></div>
 
     <div class="lab"><span>Memory</span><b class="amber">6.0 / 8 GB</b></div>
-    <div class="bar"><i class="fill-amber" style="width:78%"></i></div>
+    <div class="bar bar-seg">
+      <i class="seg-app" style="width:51%"></i>
+      <i class="seg-wired" style="width:15%"></i>
+      <i class="seg-comp" style="width:9%"></i>
+      <i class="seg-cache" style="width:17%"></i>
+    </div>
+    <div class="legend">
+      <span><i class="seg-app"></i>app 4.1</span>
+      <span><i class="seg-wired"></i>wired 1.2</span>
+      <span><i class="seg-comp"></i>compressed 0.7</span>
+      <span><i class="seg-cache"></i>cached 1.4</span>
+    </div>
 
     <div class="apps">
       <div class="app culprit"><span>Google Chrome</span><span class="clay">128%</span><span class="x">⊗</span></div>

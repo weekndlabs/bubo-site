@@ -7,16 +7,27 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 // change.k tags a diff (new / changed / fix); no k = a plain line (e.g. a first release).
 const releases = [
   {
+    v: '1.2',
+    date: '26 Jul 2026',
+    latest: true,
+    tag: `${repo}/releases/tag/v1.2`,
+    lede: 'Clearer at a glance. Full-word CPU tiers, a plain-language throttling badge, and a memory bar that shows what your RAM is actually spent on.',
+    changes: [
+      { k: 'changed', t: 'CPU cores named efficiency / performance, one per row, with temp, hotspot and pressure under the bar' },
+      { k: 'changed', t: 'Status badge reads throttling in plain words when the Mac runs hot, not "thermal serious"' },
+      { k: 'new', t: 'Memory broken down into app, wired, compressed, cached and free' },
+    ],
+    download: true,
+  },
+  {
     v: '1.1',
     date: '25 Jul 2026',
-    latest: true,
     tag: `${repo}/releases/tag/v1.1`,
     lede: 'Intel is in. Bubo now ships a native build for Intel Macs alongside Apple Silicon.',
     changes: [
       { k: 'new', t: 'Native Intel build, Bubo-intel.dmg' },
       { k: 'new', t: 'brew install picks Apple Silicon or Intel for your chip automatically' },
     ],
-    download: true,
   },
   {
     v: '1.0',
