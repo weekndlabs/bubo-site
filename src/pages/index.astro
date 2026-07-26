@@ -3,7 +3,6 @@ import Analytics from '@vercel/analytics/astro';
 
 const brew = 'brew install fajarhide/tap/bubo';
 const repo = 'https://github.com/fajarhide/bubo';
-const releases = `${repo}/releases/latest`;
 const tap = 'https://github.com/fajarhide/homebrew-tap';
 
 // Direct .dmg links: /latest/download/ serves the file straight away and always
@@ -91,6 +90,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     <nav class="mb-nav">
       <a href="#features">Features</a>
       <a href="#install">Install</a>
+      <a href="/releases">Releases</a>
       <a href={repo} rel="noopener">GitHub ↗</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
@@ -268,7 +268,7 @@ const cores = [78, 64, 55, 40, 88, 72, 30, 22];
     </div>
     <nav class="foot-links">
       <a href={repo} rel="noopener">GitHub</a>
-      <a href={releases} rel="noopener">Releases</a>
+      <a href="/releases">Releases</a>
       <a href={tap} rel="noopener">Homebrew tap</a>
     </nav>
     <p class="foot-legal">MIT © 2026 fajarhide · Apple Silicon and Intel</p>
