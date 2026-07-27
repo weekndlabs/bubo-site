@@ -13,11 +13,12 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 // The real sections of the app, used verbatim as the feature list.
 // arch: 'all' runs on Intel too; 'as' needs the private Apple Silicon sensors.
 const features = [
+  { k: 'Diagnosis',     arch: 'all', d: 'One line at the top of the panel: what is wrong, which app is doing it, and one thing to do about it. Memory pressure, a runaway in the background, throttling from heat, a startup disk close to full. Bubo only advises, so the quit is still your click. When nothing is wrong it says all healthy.' },
   { k: 'Top apps',      arch: 'all', d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
   { k: 'CPU',           arch: 'all', d: 'Overall load, with efficiency and performance cores spelled out on their own rows. Temperature, hotspot and pressure sit under the bar, and the badge says throttling in plain words when it gets hot.' },
-  { k: 'Memory',        arch: 'all', d: 'Used against total, broken into app, wired, compressed, cached and free, so you see what your RAM is actually spent on. DRAM bandwidth too, and a swap warning when it starts thrashing.' },
+  { k: 'Memory',        arch: 'all', d: 'Used against total, broken into app, wired, compressed, cached and free, so you see what your RAM is actually spent on. The figures agree with Activity Monitor, per app and for the system. DRAM bandwidth too, and pressure read from the OS rather than guessed at.' },
   { k: 'GPU & fan',     arch: 'as',  d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
-  { k: 'Battery',       arch: 'all', d: 'Charge, drain or charge rate, adapter watts, cycles, health and cell temperature.' },
+  { k: 'Battery',       arch: 'all', d: 'The same charge macOS itself reports, plus drain or charge rate, adapter watts, cycles, health and cell temperature.' },
   { k: 'Network & disk',arch: 'all', d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
   { k: 'Power rails',   arch: 'as',  d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM, whatever your chip exposes.' },
   { k: 'Optimize',      arch: 'all', d: 'Purge the disk cache, or quit every heavy app at once, with a confirmation first.' },
@@ -34,7 +35,7 @@ const specs = [
 
 const faqs = [
   { q: 'How is this different from Activity Monitor?',
-    a: 'Activity Monitor is a window you open and read. Bubo stays in the menu bar and flags the heavy app the moment it starts to drag, then quits it in one click.' },
+    a: 'Activity Monitor shows you numbers and leaves you to read them. Bubo does that part for you. It says memory is tight and Chrome is holding 4 GB of it, then quits Chrome in one click. Same data, one line instead of a dozen columns.' },
   { q: 'Will a monitor slow my Mac down too?',
     a: 'Bubo is a lean native binary with no background daemon. It samples on a light interval and stays out of the way otherwise.' },
   { q: 'Is it safe? It reads private Apple sensors.',
@@ -54,21 +55,21 @@ const pCores = [34, 26, 20, 15];
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bubo — catch the app slowing your Mac</title>
-  <meta name="description" content="A tiny macOS menu-bar monitor that names the app eating your CPU and memory, then quits it in one click. Runs native on Apple Silicon and Intel, no daemon, no sudo." />
+  <meta name="description" content="A tiny macOS menu-bar monitor that tells you why your Mac is slow in one line, names the app doing it, and quits it in one click. Native on Apple Silicon and Intel, no daemon, no sudo." />
   <link rel="canonical" href="https://bubo.weekndlabs.com/" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bubo.weekndlabs.com/" />
   <meta property="og:site_name" content="Bubo" />
   <meta property="og:title" content="Bubo — catch the app slowing your Mac" />
-  <meta property="og:description" content="A tiny macOS menu-bar monitor that names the heavy app and quits it in one click. Native on Apple Silicon and Intel." />
+  <meta property="og:description" content="A tiny macOS menu-bar monitor that names the cause in one line, then quits the heavy app in one click. Native on Apple Silicon and Intel." />
   <meta property="og:image" content="https://bubo.weekndlabs.com/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="The Bubo panel catching Google Chrome at 128% CPU, the heaviest app." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Bubo — catch the app slowing your Mac" />
-  <meta name="twitter:description" content="A tiny macOS menu-bar monitor that names the heavy app and quits it in one click. Native on Apple Silicon and Intel." />
+  <meta name="twitter:description" content="A tiny macOS menu-bar monitor that names the cause in one line, then quits the heavy app in one click. Native on Apple Silicon and Intel." />
   <meta name="twitter:image" content="https://bubo.weekndlabs.com/og.png" />
   <meta name="theme-color" content="#12141F" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)" />
@@ -106,9 +107,9 @@ const pCores = [34, 26, 20, 15];
         <p class="eyebrow">macOS menu-bar monitor</p>
         <h1>Catch the app<br />slowing your Mac.</h1>
         <p class="lede">
-          Bubo sits in your menu bar and names the process eating your CPU and
-          memory, then quits it in one click. Native on Apple Silicon and
-          Intel, no daemon, no sudo.
+          Bubo sits in your menu bar and tells you what is wrong in one line,
+          names the app doing it, and quits it in one click. Native on Apple
+          Silicon and Intel, no daemon, no sudo.
         </p>
 
         <div class="cmd" data-copy={brew}>
@@ -125,12 +126,16 @@ const pCores = [34, 26, 20, 15];
 
       <!-- Signature: a working recreation of the Bubo panel, culprit in red. -->
       <div class="panel-wrap">
-        <div class="panel" role="img" aria-label="The Bubo panel, showing Google Chrome as the heaviest app at 128 percent CPU">
+        <div class="panel" role="img" aria-label="The Bubo panel, naming Google Chrome as the reason memory is tight and suggesting you quit it">
           <div class="p-head">
-            <div class="p-title">Bubo <span class="p-ver">1.2</span></div>
+            <div class="p-title">Bubo <span class="p-ver">1.3</span></div>
             <div class="p-badge">BUSY&nbsp;·&nbsp;RAM 78%</div>
           </div>
-          <div class="p-sub">M1 · 8 cores</div>
+          <div class="p-sub">M1 · 8 cores · up 4h 12m</div>
+
+          <!-- v1.3: the diagnosis line. Italic and header-sized, because it is
+               Bubo annotating the panel rather than another reading inside it. -->
+          <p class="p-dx"><span class="p-dx-mark clay">⚠</span> Memory is tight. Google Chrome is using 1.6 GB. Quit it if you don't need it.</p>
 
           <div class="p-row-label"><span>CPU</span><b class="sage">22%</b></div>
           <div class="bar"><i style="width:22%" class="fill-sage"></i></div>
@@ -187,9 +192,10 @@ const pCores = [34, 26, 20, 15];
       <h2>Activity Monitor makes you go looking.<br /><em>Bubo just tells you.</em></h2>
       <p class="band-body">
         A slow Mac is usually one greedy app. Activity Monitor keeps that answer
-        behind a window and a dozen columns. Bubo keeps it in the corner of your
-        screen. The dot turns amber, then red, when something starts to drag, and
-        one click shows you the culprit and quits it.
+        behind a window and a dozen columns you have to read yourself. Bubo keeps
+        it in the corner of your screen and does the reading. The dot turns amber,
+        then red, and one click opens a line naming the app and what to do.
+        Quitting it is still your call; Bubo never acts on its own.
       </p>
       <figure class="demo-frame">
         <video
@@ -530,6 +536,11 @@ const pCores = [34, 26, 20, 15];
       padding: 3px 8px; border-radius: 20px;
     }
     .p-sub { font-family: var(--mono); font-size: 0.68rem; color: var(--faint); margin-top: 2px; }
+    .p-dx {
+      font-family: var(--mono); font-size: 0.68rem; font-style: italic;
+      color: var(--text); line-height: 1.5; margin: 10px 0 0;
+    }
+    .p-dx-mark { font-style: normal; }
 
     .p-row-label { display: flex; align-items: baseline; justify-content: space-between; margin-top: 16px; }
     .p-row-label.mt { margin-top: 18px; }

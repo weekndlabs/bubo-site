@@ -7,9 +7,25 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 // change.k tags a diff (new / changed / fix); no k = a plain line (e.g. a first release).
 const releases = [
   {
+    v: '1.3',
+    date: '27 Jul 2026',
+    latest: true,
+    tag: `${repo}/releases/tag/v1.3`,
+    lede: 'Bubo names the cause now. The panel used to show readings and leave the interpreting to you. It now says what is likely wrong and one thing to do about it, in a sentence.',
+    changes: [
+      { k: 'new', t: 'Diagnosis banner: the likely cause and one suggested action, in plain words' },
+      { k: 'new', t: 'System uptime in the panel header' },
+      { k: 'changed', t: 'Panel draws a solid background instead of the popover material' },
+      { k: 'fix', t: 'Memory matches Activity Monitor, per app and system used' },
+      { k: 'fix', t: 'Battery shows the charge macOS shows, not the raw mAh ratio' },
+      { k: 'fix', t: 'A busy app in front no longer hides a runaway in the background' },
+      { k: 'fix', t: 'Memory pressure follows the OS verdict instead of two guessed thresholds' },
+    ],
+    download: true,
+  },
+  {
     v: '1.2',
     date: '26 Jul 2026',
-    latest: true,
     tag: `${repo}/releases/tag/v1.2`,
     lede: 'Clearer at a glance. Full-word CPU tiers, a plain-language throttling badge, and a memory bar that shows what your RAM is actually spent on.',
     changes: [
@@ -17,7 +33,6 @@ const releases = [
       { k: 'changed', t: 'Status badge reads throttling in plain words when the Mac runs hot, not "thermal serious"' },
       { k: 'new', t: 'Memory broken down into app, wired, compressed, cached and free' },
     ],
-    download: true,
   },
   {
     v: '1.1',
