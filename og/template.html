@@ -45,7 +45,7 @@
 
   /* the panel snippet: the culprit caught red-handed */
   .panel { position: relative; z-index: 2; background: var(--night-2);
-    border: 1px solid var(--line); border-radius: 20px; padding: 22px;
+    border: 1px solid var(--line); border-radius: 20px; padding: 18px;
     box-shadow: 0 40px 90px -30px rgba(0,0,0,0.75); }
   .p-head { display: flex; align-items: baseline; justify-content: space-between; }
   .p-title { font-weight: 700; font-size: 20px; }
@@ -53,7 +53,7 @@
   .p-badge { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--amber);
     background: rgba(245,184,65,0.14); padding: 5px 11px; border-radius: 20px; }
   .p-sub { font-family: var(--mono); font-size: 13px; color: var(--faint); margin-top: 4px; }
-  .lab { display: flex; justify-content: space-between; align-items: baseline; margin-top: 22px;
+  .lab { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px;
     font-family: var(--mono); }
   .lab span { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
   .lab b { font-size: 22px; font-weight: 600; }
@@ -61,18 +61,35 @@
   .bar i { display: block; height: 100%; border-radius: 6px; }
   .sage { color: var(--sage); } .amber { color: var(--amber); } .clay { color: var(--clay); }
   .fill-sage { background: var(--sage); } .fill-amber { background: var(--amber); }
-  /* v1.2: temps under the CPU bar, memory used bar broken into segments */
-  .p-temps { display: flex; gap: 16px; margin-top: 9px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  /* the diagnosis line: Bubo annotating the panel, not another reading in it */
+  .p-dx { font-family: var(--mono); font-size: 13px; font-style: italic; line-height: 1.5;
+    margin-top: 12px; display: flex; gap: 7px; }
+  .p-dx .mark { font-style: normal; color: var(--clay); }
+  /* fact rows under a heading: three columns, label left, value hard right */
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 12px; margin-top: 9px;
+    font-family: var(--mono); font-size: 12px; }
+  .facts span { display: flex; justify-content: space-between; gap: 8px; }
+  .facts i { font-style: normal; color: var(--faint); }
+  .facts b { font-weight: 500; color: var(--muted); }
+  /* one row per core tier: name, a bar per core, then usage and frequency */
+  .tier { display: flex; align-items: center; gap: 8px; margin-top: 9px;
+    font-family: var(--mono); font-size: 12px; }
+  .tier-k { flex: 0 0 88px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+  .cores { flex: 1; display: flex; gap: 4px; }
+  .core { flex: 1; height: 6px; background: #2b3147; border-radius: 3px; overflow: hidden; }
+  .core i { display: block; height: 100%; border-radius: 3px; background: var(--sage); }
+  .tier-v { flex: 0 0 34px; text-align: right; font-weight: 600; color: var(--sage); }
+  .tier-f { flex: 0 0 56px; text-align: right; color: var(--muted); }
   .bar-seg { display: flex; }
   .bar-seg i { height: 100%; border-radius: 0; }
   .seg-app { background: var(--amber); } .seg-wired { background: var(--clay); }
   .seg-comp { background: #B98A3A; } .seg-cache { background: var(--sage); }
-  .legend { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 11px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 13px; margin-top: 9px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .legend i { width: 9px; height: 9px; border-radius: 2px; }
-  .apps { margin-top: 22px; font-family: var(--mono); font-size: 15px; }
+  .apps { margin-top: 16px; font-family: var(--mono); font-size: 15px; }
   .app { display: grid; grid-template-columns: 1fr auto 22px; align-items: center; gap: 12px;
-    padding: 8px 10px; border-radius: 8px; }
+    padding: 6px 10px; border-radius: 8px; }
   .app + .app { margin-top: 2px; }
   .app .x { color: var(--muted); text-align: center; }
   .culprit { background: rgba(224,119,111,0.16); }
@@ -93,16 +110,41 @@
 
   <div class="panel">
     <div class="p-head">
-      <div class="p-title">Bubo <span class="p-ver">1.2</span></div>
+      <div class="p-title">Bubo <span class="p-ver">1.4</span></div>
       <div class="p-badge">BUSY · RAM 78%</div>
     </div>
-    <div class="p-sub">M1 · 8 cores</div>
+    <div class="p-sub">M1 · 8 cores · up 4h 12m</div>
+
+    <p class="p-dx"><span class="mark">⚠</span> Memory is tight. Google Chrome is using 1.6 GB. Quit it if you don't need it.</p>
 
     <div class="lab"><span>CPU</span><b class="sage">22%</b></div>
     <div class="bar"><i class="fill-sage" style="width:22%"></i></div>
-    <div class="p-temps"><span>temp 44°</span><span>hotspot 52°</span><span>pressure nominal</span></div>
+    <div class="facts">
+      <span><i>temp</i><b>44 °C</b></span>
+      <span><i>hotspot</i><b>52 °C</b></span>
+      <span><i>pressure</i><b>nominal</b></span>
+    </div>
+    <div class="facts">
+      <span><i>fan</i><b>1191 RPM</b></span>
+      <span><i>floor</i><b>1199</b></span>
+      <span><i>ceiling</i><b>7199</b></span>
+    </div>
+    <div class="tier">
+      <span class="tier-k">efficiency</span>
+      <div class="cores"><span class="core"><i style="width:78%"></i></span><span class="core"><i style="width:64%"></i></span><span class="core"><i style="width:55%"></i></span><span class="core"><i style="width:40%"></i></span></div>
+      <b class="tier-v">59%</b><span class="tier-f">1.8 GHz</span>
+    </div>
+    <div class="tier">
+      <span class="tier-k">performance</span>
+      <div class="cores"><span class="core"><i style="width:34%"></i></span><span class="core"><i style="width:26%"></i></span><span class="core"><i style="width:20%"></i></span><span class="core"><i style="width:15%"></i></span></div>
+      <b class="tier-v">24%</b><span class="tier-f">2.5 GHz</span>
+    </div>
 
     <div class="lab"><span>Memory</span><b class="amber">6.0 / 8 GB</b></div>
+    <div class="facts">
+      <span><i>read</i><b>1.4 GB/s</b></span>
+      <span><i>write</i><b>846 MB/s</b></span>
+    </div>
     <div class="bar bar-seg">
       <i class="seg-app" style="width:51%"></i>
       <i class="seg-wired" style="width:15%"></i>
@@ -112,7 +154,7 @@
     <div class="legend">
       <span><i class="seg-app"></i>app 4.1</span>
       <span><i class="seg-wired"></i>wired 1.2</span>
-      <span><i class="seg-comp"></i>compressed 0.7</span>
+      <span><i class="seg-comp"></i>comp 0.7</span>
       <span><i class="seg-cache"></i>cached 1.4</span>
     </div>
 
@@ -120,7 +162,6 @@
       <div class="app culprit"><span>Google Chrome</span><span class="clay">128%</span><span class="x">⊗</span></div>
       <div class="app"><span>WindowServer</span><span class="sage">26%</span><span></span></div>
       <div class="app"><span>claude</span><span class="sage">18%</span><span></span></div>
-      <div class="app"><span>Orca</span><span class="sage">14%</span><span class="x">⊗</span></div>
     </div>
   </div>
 </body>

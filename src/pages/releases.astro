@@ -7,9 +7,25 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 // change.k tags a diff (new / changed / fix); no k = a plain line (e.g. a first release).
 const releases = [
   {
+    v: '1.4',
+    date: '28 Jul 2026',
+    latest: true,
+    tag: `${repo}/releases/tag/v1.4`,
+    lede: 'The panel got out of its own way. It opens flat under the menu bar and as tall as the screen allows, and the readings inside it now say what they are measured against.',
+    changes: [
+      { k: 'new', t: 'Check for Updates in the right-click menu, comparing the latest release against the build you are running' },
+      { k: 'new', t: 'Report a bug opens a GitHub issue form with your Bubo build, chip, RAM and macOS version already filled in' },
+      { k: 'changed', t: 'Panel opens flat under the menu bar and as tall as the screen allows, instead of a fixed height that hid the lower half behind a scroll' },
+      { k: 'changed', t: 'Efficiency and performance rows draw a bar per core and end in that tier\'s usage and speed; the separate core row is gone' },
+      { k: 'changed', t: 'Fan reads against its own floor and ceiling, on a row under the temperatures' },
+      { k: 'changed', t: 'Memory leads with used against total, and DRAM bandwidth moved above the bar, out of the app / wired / compressed / cached list' },
+      { k: 'changed', t: 'Power rails split the draw by rail on their own bar, next to battery' },
+    ],
+    download: true,
+  },
+  {
     v: '1.3',
     date: '27 Jul 2026',
-    latest: true,
     tag: `${repo}/releases/tag/v1.3`,
     lede: 'Bubo names the cause now. The panel used to show readings and leave the interpreting to you. It now says what is likely wrong and one thing to do about it, in a sentence.',
     changes: [
@@ -21,7 +37,6 @@ const releases = [
       { k: 'fix', t: 'A busy app in front no longer hides a runaway in the background' },
       { k: 'fix', t: 'Memory pressure follows the OS verdict instead of two guessed thresholds' },
     ],
-    download: true,
   },
   {
     v: '1.2',

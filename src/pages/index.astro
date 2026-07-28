@@ -15,9 +15,9 @@ const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
 const features = [
   { k: 'Diagnosis',     arch: 'all', d: 'One line at the top of the panel: what is wrong, which app is doing it, and one thing to do about it. Memory pressure, a runaway in the background, throttling from heat, a startup disk close to full. Bubo only advises, so the quit is still your click. When nothing is wrong it says all healthy.' },
   { k: 'Top apps',      arch: 'all', d: 'The eight heaviest processes, grouped per app, each with its own quit button. This is the whole point.' },
-  { k: 'CPU',           arch: 'all', d: 'Overall load, with efficiency and performance cores spelled out on their own rows. Temperature, hotspot and pressure sit under the bar, and the badge says throttling in plain words when it gets hot.' },
+  { k: 'CPU',           arch: 'all', d: 'Overall load, then a row per core tier with a bar for every core in it, that tier\'s usage and its speed. Temperature, hotspot, pressure and fan sit under the bar, the fan against its own floor and ceiling so the RPM means something. The badge says throttling in plain words when it gets hot.' },
   { k: 'Memory',        arch: 'all', d: 'Used against total, broken into app, wired, compressed, cached and free, so you see what your RAM is actually spent on. The figures agree with Activity Monitor, per app and for the system. DRAM bandwidth too, and pressure read from the OS rather than guessed at.' },
-  { k: 'GPU & fan',     arch: 'as',  d: 'GPU usage, frequency and power draw. Live fan RPM, hidden on fanless Macs.' },
+  { k: 'GPU',           arch: 'as',  d: 'Usage, frequency and power draw, read from the same private sensors as the temperatures.' },
   { k: 'Battery',       arch: 'all', d: 'The same charge macOS itself reports, plus drain or charge rate, adapter watts, cycles, health and cell temperature.' },
   { k: 'Network & disk',arch: 'all', d: 'Live throughput sparklines for both, auto-scaled from bytes to gigabytes per second.' },
   { k: 'Power rails',   arch: 'as',  d: 'Per-rail draw for CPU, GPU, Neural Engine and DRAM, whatever your chip exposes.' },
@@ -44,9 +44,14 @@ const faqs = [
     a: 'Apple Silicon (M1–M5) for the full panel. Intel for the essentials: CPU, memory, top apps, battery, network and disk. Both follow your system light and dark.' },
 ];
 
-// Hero panel core tiers. v1.2 names them in full instead of E / P, one row each.
-const eCores = [78, 64, 55, 40];
-const pCores = [34, 26, 20, 15];
+// Hero panel core tiers. Named in full instead of E / P, one row each; since
+// v1.4 each row draws a bar per core and ends in that tier's usage and average
+// frequency. The tier percentages are the cluster's active residency, which sits
+// above the system-wide CPU figure rather than averaging out to it.
+const tiers = [
+  { k: 'efficiency',  cores: [78, 64, 55, 40], use: '59%', freq: '1.8 GHz' },
+  { k: 'performance', cores: [34, 26, 20, 15], use: '24%', freq: '2.5 GHz' },
+];
 ---
 
 <!doctype html>
@@ -66,7 +71,7 @@ const pCores = [34, 26, 20, 15];
   <meta property="og:image" content="https://bubo.weekndlabs.com/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="The Bubo panel catching Google Chrome at 128% CPU, the heaviest app." />
+  <meta property="og:image:alt" content="The Bubo panel naming Google Chrome as the reason memory is tight, and the app caught at 128% CPU." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Bubo — catch the app slowing your Mac" />
   <meta name="twitter:description" content="A tiny macOS menu-bar monitor that names the cause in one line, then quits the heavy app in one click. Native on Apple Silicon and Intel." />
@@ -128,7 +133,7 @@ const pCores = [34, 26, 20, 15];
       <div class="panel-wrap">
         <div class="panel" role="img" aria-label="The Bubo panel, naming Google Chrome as the reason memory is tight and suggesting you quit it">
           <div class="p-head">
-            <div class="p-title">Bubo <span class="p-ver">1.3</span></div>
+            <div class="p-title">Bubo <span class="p-ver">1.4</span></div>
             <div class="p-badge">BUSY&nbsp;·&nbsp;RAM 78%</div>
           </div>
           <div class="p-sub">M1 · 8 cores · up 4h 12m</div>
@@ -139,25 +144,38 @@ const pCores = [34, 26, 20, 15];
 
           <div class="p-row-label"><span>CPU</span><b class="sage">22%</b></div>
           <div class="bar"><i style="width:22%" class="fill-sage"></i></div>
-          <div class="p-temps"><span>temp 44°</span><span>hotspot 52°</span><span>pressure nominal</span></div>
-          <div class="tier">
-            <span class="tier-k">efficiency</span>
-            <div class="cores">
-              {eCores.map((c) => (
-                <span class="core"><i style={`height:${Math.max(14, c)}%`} class="fill-sage"></i></span>
-              ))}
-            </div>
+          <div class="p-facts">
+            <span><i>temp</i><b>44 °C</b></span>
+            <span><i>hotspot</i><b>52 °C</b></span>
+            <span><i>pressure</i><b>nominal</b></span>
           </div>
-          <div class="tier">
-            <span class="tier-k">performance</span>
-            <div class="cores">
-              {pCores.map((c) => (
-                <span class="core"><i style={`height:${Math.max(14, c)}%`} class="fill-sage"></i></span>
-              ))}
-            </div>
+          <!-- v1.4: the fan reads against its own floor and ceiling, which is what
+               makes the RPM mean anything, so it sits under the temperatures. -->
+          <div class="p-facts">
+            <span><i>fan</i><b>1191 RPM</b></span>
+            <span><i>floor</i><b>1199</b></span>
+            <span><i>ceiling</i><b>7199</b></span>
           </div>
+          {tiers.map((t) => (
+            <div class="tier">
+              <span class="tier-k">{t.k}</span>
+              <div class="cores">
+                {t.cores.map((c) => (
+                  <span class="core"><i style={`width:${Math.max(6, c)}%`} class="fill-sage"></i></span>
+                ))}
+              </div>
+              <b class="tier-v sage">{t.use}</b>
+              <span class="tier-f">{t.freq}</span>
+            </div>
+          ))}
 
           <div class="p-row-label mt"><span>MEMORY</span><b class="amber">6.0 / 8 GB</b></div>
+          <!-- v1.4: DRAM bandwidth is a rate, so it reads above the bar instead of
+               among the amounts app / wired / compressed / cached are measured in. -->
+          <div class="p-facts">
+            <span><i>read</i><b>1.4 GB/s</b></span>
+            <span><i>write</i><b>846 MB/s</b></span>
+          </div>
           <div class="bar bar-seg">
             <i class="seg-app" style="width:51%"></i>
             <i class="seg-wired" style="width:15%"></i>
@@ -214,7 +232,7 @@ const pCores = [34, 26, 20, 15];
     <section class="features" id="features">
       <div class="sec-head">
         <p class="eyebrow">what one click opens</p>
-        <h2>Everything Activity Monitor buries,<br />in one quiet popover.</h2>
+        <h2>Everything Activity Monitor buries,<br />in one quiet panel.</h2>
       </div>
       <div class="grid">
         {features.map((f) => (
@@ -373,7 +391,7 @@ const pCores = [34, 26, 20, 15];
        pinned: --sage darkens in light mode and would leave dark ink on dark green. */
     .cmd-btn.is-copied { color: #10261A; }
 
-    /* The hero panel drifts between its dark and light popover looks. Registered
+    /* The hero panel drifts between its dark and light looks. Registered
        color props interpolate, so every child reading these vars fades smoothly. */
     @property --p-bg    { syntax: '<color>'; inherits: true; initial-value: #1A1D2B; }
     @property --p-line  { syntax: '<color>'; inherits: true; initial-value: #2A3048; }
@@ -559,21 +577,30 @@ const pCores = [34, 26, 20, 15];
     .amber { color: var(--amber); }
     .clay { color: var(--clay); }
 
-    .cores { display: flex; gap: 4px; align-items: flex-end; height: 22px; margin-top: 8px; }
-    .core { flex: 1; height: 100%; background: var(--p-track); border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; }
-    .core i { width: 100%; border-radius: 4px; }
-
-    /* v1.2: temps under the CPU bar, and core tiers named in full, one row each */
-    .p-temps {
-      display: flex; gap: 14px; margin-top: 7px;
-      font-family: var(--mono); font-size: 0.58rem; color: var(--faint);
+    /* Fact rows under a heading: three fixed columns, label left, value hard
+       right in each. A row of two leaves the third column empty, which is how
+       DRAM read/write clears the memory figure above it. */
+    .p-facts {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px 10px;
+      margin-top: 7px; font-family: var(--mono); font-size: 0.58rem;
     }
-    .tier { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .p-facts span { display: flex; justify-content: space-between; gap: 6px; }
+    .p-facts i { font-style: normal; color: var(--faint); }
+    .p-facts b { font-weight: 500; color: var(--muted); }
+
+    /* v1.4: one row per tier — name, a bar per core in it, then that tier's
+       usage and average frequency against the right edge. */
+    .tier { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
     .tier-k {
       flex: 0 0 74px; font-family: var(--mono); font-size: 0.56rem;
       letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint);
     }
-    .tier .cores { flex: 1; height: 16px; margin-top: 0; }
+    .cores { flex: 1; display: flex; gap: 3px; min-width: 0; }
+    .core { flex: 1; height: 5px; background: var(--p-track); border-radius: 3px; overflow: hidden; }
+    .core i { display: block; height: 100%; border-radius: 3px; }
+    .tier-v, .tier-f { font-family: var(--mono); font-size: 0.58rem; text-align: right; }
+    .tier-v { flex: 0 0 30px; font-weight: 600; }
+    .tier-f { flex: 0 0 48px; color: var(--muted); }
 
     /* v1.2: memory used bar broken into app / wired / compressed / cached / free */
     .bar-seg { display: flex; }
