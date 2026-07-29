@@ -1,11 +1,11 @@
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/serverless';
 
-// Hybrid, not server: the marketing pages and the changelog stay prerendered and
-// cached exactly as before. Only the routes that have to know who is asking opt
-// out, with `export const prerender = false`.
+// Static output. Vercel detects Astro and builds dist/ with no adapter.
+//
+// The dashboard is prerendered too, for now. It becomes server-rendered when
+// Clerk lands, and that is the change that brings the adapter back: pair it
+// with an Astro version whose adapter targets a supported Node, since
+// @astrojs/vercel@7 pins nodejs18.x and Vercel rejects that runtime outright.
 export default defineConfig({
   site: 'https://bubo.weekndlabs.com',
-  output: 'hybrid',
-  adapter: vercel(),
 });

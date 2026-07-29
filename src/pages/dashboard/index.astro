@@ -1,14 +1,11 @@
 ---
 import Dash from '../../layouts/Dash.astro';
 
-// Reads the caller, so it cannot be prerendered.
-export const prerender = false;
-
 // PLACEHOLDER SESSION. Clerk replaces this whole block with
 //   const { userId } = Astro.locals.auth();
 // and the plan comes from that user's privateMetadata, written by the store's
-// order webhook. Until the keys exist, ?plan=pro previews the paid state.
-const plan = Astro.url.searchParams.get('plan') === 'pro' ? 'pro' : 'free';
+// order webhook. Until then this constant stands in for it.
+const plan: 'free' | 'pro' = 'free';   // flip to 'pro' to see the paid state
 const isPro = plan === 'pro';
 
 const version = '1.4';

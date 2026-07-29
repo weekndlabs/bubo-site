@@ -1,12 +1,10 @@
 ---
 import Dash from '../../layouts/Dash.astro';
 
-export const prerender = false;
-
 // PLACEHOLDER. The key and its activations come from the store's licensing API,
 // keyed by the Clerk user. A free account has no key and is told so rather than
 // shown a masked one that suggests something is being withheld.
-const plan = Astro.url.searchParams.get('plan') === 'pro' ? 'pro' : 'free';
+const plan: 'free' | 'pro' = 'free';   // flip to 'pro' to see the paid state
 const isPro = plan === 'pro';
 
 const license = {
@@ -85,9 +83,6 @@ const license = {
       <div class="empty">
         Buying a key issues it here straight away, and the receipt goes to your
         email. Three Macs per key, and you can move a slot whenever you like.
-      </div>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="/dashboard">Buy a key</a>
       </div>
     </section>
   )}
