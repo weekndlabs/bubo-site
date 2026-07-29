@@ -42,15 +42,26 @@ const check = (label, fg, bg) => {
   console.log(`${r < AA ? 'FAIL' : 'ok  '}  ${line}`);
 };
 
-// Accents used as text sit on the page background or on a card.
-for (const page of ['index', 'releases']) {
-  const tokens = readThemedTokens(readFileSync(`src/pages/${page}.astro`, 'utf8'));
-  for (const accent of ['sage', 'clay', 'amber']) {
-    for (const surface of ['night', 'card']) {
-      for (const theme of ['light', 'dark']) {
-        check(`${page} --${accent} on --${surface} (${theme})`,
-          tokens[accent][theme], tokens[surface][theme]);
-      }
+// Accents used as text sit on the page background or on a card. Every page
+// reads the same token file, so checking it once covers all of them.
+const tokens = readThemedTokens(readFileSync('src/styles/tokens.css', 'utf8'));
+for (const accent of ['sage', 'clay', 'amber']) {
+  for (const surface of ['night', 'night-2', 'card']) {
+    for (const theme of ['light', 'dark']) {
+      check(`--${accent} on --${surface} (${theme})`,
+        tokens[accent][theme], tokens[surface][theme]);
+    }
+  }
+}
+
+// The dashboard reads real values off its own panels, so the inks it is allowed
+// to use for them are checked too. --faint is deliberately not in this list: it
+// measures 2.40:1 on a dark card and is only ever decoration.
+for (const ink of ['text', 'muted']) {
+  for (const surface of ['night', 'night-2', 'card']) {
+    for (const theme of ['light', 'dark']) {
+      check(`--${ink} on --${surface} (${theme})`,
+        tokens[ink][theme], tokens[surface][theme]);
     }
   }
 }

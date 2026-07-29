@@ -1,4 +1,6 @@
 ---
+import '../styles/tokens.css';
+
 // Bubo ships from this site: the .dmg files live in public/ and are committed
 // per release, so only the newest entry carries download buttons.
 const dmgArm = '/Bubo-apple-silicon.dmg';
@@ -192,25 +194,8 @@ const releases = [
   </script>
 
   <style is:global>
-    :root {
-      color-scheme: light dark;
-      --night: light-dark(#FAF8F3, #12141F);
-      --night-2: light-dark(#F0ECE2, #1A1D2B);
-      --card: light-dark(#F4F0E7, #1E2333);
-      --line: light-dark(#D8D1C0, #2A3048);
-      --line-soft: light-dark(#E4DECF, #21273a);
-      --amber: light-dark(#975E00, #F5B841);
-      --amber-bright: light-dark(#B87400, #FCD670);
-      --sage: light-dark(#2A6B41, #6BCC8F);
-      --clay: light-dark(#9B3E37, #E0776F);
-      --text: light-dark(#1C1E28, #ECEEF5);
-      --muted: light-dark(#5A5F70, #8A90A6);
-      --faint: light-dark(#787E90, #565D75);
-      --display: 'Bricolage Grotesque', system-ui, sans-serif;
-      --body: 'Inter', system-ui, sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, monospace;
-      --wrap: 760px;
-    }
+    /* the changelog is a reading column, narrower than the marketing pages */
+    :root { --wrap: 760px; }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }

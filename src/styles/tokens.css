@@ -1,0 +1,26 @@
+/* The brand, in one place. Every page imports this instead of carrying its own
+   copy, so a colour changes once and `npm run check:contrast` reads one file.
+
+   Each token carries both themes via light-dark(); color-scheme picks one.
+   Default `light dark` follows the OS, and the theme toggle overrides it by
+   setting color-scheme on <html>. Amber deepens in light so it holds as text
+   on paper. */
+:root {
+  color-scheme: light dark;
+  --night: light-dark(#FAF8F3, #12141F);
+  --night-2: light-dark(#F0ECE2, #1A1D2B);
+  --card: light-dark(#F4F0E7, #1E2333);
+  --line: light-dark(#D8D1C0, #2A3048);
+  --line-soft: light-dark(#E4DECF, #21273a);
+  --amber: light-dark(#975E00, #F5B841);
+  --amber-bright: light-dark(#B87400, #FCD670);
+  --sage: light-dark(#2A6B41, #6BCC8F);
+  --clay: light-dark(#9B3E37, #E0776F);
+  --text: light-dark(#1C1E28, #ECEEF5);
+  --muted: light-dark(#5A5F70, #8A90A6);
+  --faint: light-dark(#787E90, #565D75);
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --wrap: 1120px;
+}
