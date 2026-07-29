@@ -1,0 +1,123 @@
+---
+import Dash from '../../layouts/Dash.astro';
+
+// Reads the caller, so it cannot be prerendered.
+export const prerender = false;
+
+// PLACEHOLDER SESSION. Clerk replaces this whole block with
+//   const { userId } = Astro.locals.auth();
+// and the plan comes from that user's privateMetadata, written by the store's
+// order webhook. Until the keys exist, ?plan=pro previews the paid state.
+const plan = Astro.url.searchParams.get('plan') === 'pro' ? 'pro' : 'free';
+const isPro = plan === 'pro';
+
+const version = '1.4';
+const builds = [
+  { k: 'Apple Silicon', sub: 'M1 through M5', href: '/Bubo-apple-silicon.dmg' },
+  { k: 'Intel',         sub: 'older Macs',    href: '/Bubo-intel.dmg' },
+];
+---
+
+<Dash title="Your Bubo" active="home" user={{ handle: '@fajarhide', name: 'Fajar Hidayat' }}>
+  <div class="work-head">
+    <h1>Your Bubo</h1>
+    <p>The build you have access to, and what it is licensed for.</p>
+  </div>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Bubo for macOS</h2>
+        <p class="card-sub">Version {version} · macOS 13 and later</p>
+      </div>
+      <span class:list={['badge', isPro ? 'badge--pro' : 'badge--free']}>
+        {isPro ? 'Pro' : 'Personal'}
+      </span>
+    </div>
+
+    <div class="builds">
+      {builds.map((b) => (
+        <a class="build" href={b.href} download>
+          <span class="build-k">{b.k}</span>
+          <span class="build-sub">{b.sub}</span>
+          <span class="build-go" aria-hidden="true">↓</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="note">
+      Downloads are open to everyone, signed in or not. macOS quarantines
+      anything from the web, so the first launch is <b>right-click, then Open</b>.
+    </p>
+  </section>
+
+  {isPro ? (
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Pro is active</h2>
+          <p class="card-sub">Your key is on the License page, with the Macs it is running on.</p>
+        </div>
+        <span class="badge badge--ok">2 of 3 Macs</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href="/dashboard/license">View license key</a>
+      </div>
+    </section>
+  ) : (
+    <section class="card upsell">
+      <div class="card-head">
+        <div>
+          <h2>Upgrade to Pro</h2>
+          <p class="card-sub">
+            One key, three Macs, no subscription to remember. Personal keeps the
+            panel and one-click quit for as long as you want it.
+          </p>
+        </div>
+      </div>
+      <ul class="perks">
+        <li>Everything in Personal, and it stays free</li>
+        <li>A license key for up to three of your own Macs</li>
+        <li>Updates for this major version</li>
+      </ul>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/dashboard/license">Buy a key</a>
+        <a class="btn btn--ghost" href="/releases">See what shipped</a>
+      </div>
+      <p class="note">
+        Sold through a merchant of record, so the price you see includes whatever
+        VAT your country charges, and the invoice comes from them.
+      </p>
+    </section>
+  )}
+</Dash>
+
+<style>
+  /* two builds, side by side, each its own target rather than a picker plus a
+     button: fewer steps, and nothing to get wrong before clicking */
+  .builds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+  .build {
+    display: grid; grid-template-columns: 1fr auto; align-items: center;
+    gap: 2px 12px; padding: 14px 16px; min-height: 44px;
+    border: 1px solid var(--line); border-radius: 12px; text-decoration: none;
+    transition: border-color 0.18s, background 0.18s;
+  }
+  .build:hover { border-color: var(--amber); background: var(--night-2); }
+  .build-k { grid-area: 1 / 1; font-family: var(--mono); font-size: 0.88rem; }
+  .build-sub { grid-area: 2 / 1; font-size: 0.78rem; color: var(--muted); }
+  .build-go { grid-area: 1 / 2 / 3 / 3; align-self: center; color: var(--amber); font-size: 1.1rem; }
+
+  .note { color: var(--muted); font-size: 0.8rem; margin: 14px 0 0; line-height: 1.5; }
+  .note b { color: var(--text); font-weight: 600; }
+
+  .perks { margin: 14px 0 0; padding: 0; list-style: none; }
+  .perks li {
+    position: relative; padding-left: 20px; font-size: 0.88rem;
+    color: var(--muted); margin-top: 6px;
+  }
+  .perks li::before { content: '·'; position: absolute; left: 6px; color: var(--amber); font-weight: 700; }
+
+  @media (max-width: 560px) {
+    .builds { grid-template-columns: 1fr; }
+  }
+</style>

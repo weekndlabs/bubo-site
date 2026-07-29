@@ -10,7 +10,11 @@
     "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
+    "@astrojs/vercel": "^7.8.2",
     "@vercel/analytics": "^2.0.1",
     "astro": "^4.16.18"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
