@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 
 // Bubo ships from this site: the .dmg files live in public/ and are committed
 // per release, so only the newest entry carries download buttons.
+const app = 'https://app.bubo.weekndlabs.com';
 const dmgArm = '/Bubo-apple-silicon.dmg';
 const dmgIntel = '/Bubo-intel.dmg';
 
@@ -106,9 +107,10 @@ const releases = [
       <span class="mb-read"><b>CPU</b> 22%&nbsp;&nbsp;<b>RAM</b> 78%</span>
     </a>
     <nav class="mb-nav">
-      <a href="/#features">Features</a>
-      <a href="/#install">Install</a>
+      <a class="mb-sec" href="/#features">Features</a>
+      <a class="mb-sec" href="/#install">Install</a>
       <a href="/releases" aria-current="page">Releases</a>
+      <a class="mb-in" href={app}>Sign&nbsp;in</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
@@ -170,6 +172,7 @@ const releases = [
     <nav class="foot-links">
       <a href="/">Home</a>
       <a href="/#install">Download</a>
+      <a href={app}>Bubo ID</a>
     </nav>
     <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
   </footer>
@@ -236,6 +239,11 @@ const releases = [
       color: var(--muted); transition: color 0.18s;
     }
     .mb-nav a:hover, .mb-nav a[aria-current="page"] { color: var(--amber); }
+    .mb-in {
+      color: var(--text); border: 1px solid var(--line);
+      border-radius: 7px; padding: 3px 10px; line-height: 1.5;
+    }
+    .mb-in:hover, .mb-nav a.mb-in:hover { border-color: var(--amber); color: var(--amber); }
     .mb-theme {
       font-family: var(--mono); font-size: 0.9rem; line-height: 1;
       background: none; border: 0; padding: 0; cursor: pointer;
@@ -337,6 +345,7 @@ const releases = [
     @media (max-width: 520px) {
       body { font-size: 16px; }
       .mb-read { display: none; }
+      .mb-sec { display: none; }
       .rel-dl { flex-direction: column; align-items: stretch; max-width: none; }
     }
 

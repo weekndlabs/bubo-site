@@ -5,6 +5,10 @@ import '../styles/tokens.css';
 // Bubo ships from this site. The .dmg files live in public/ and are committed
 // per release, so a new version means replacing both files and this number.
 const version = '1.4';
+
+// Bubo ID, the signed-in half: it holds a Pro key and the Macs it runs on.
+// Downloading needs no account, so this is a quiet nav link and not a CTA.
+const app = 'https://app.bubo.weekndlabs.com';
 const dmgArm = '/Bubo-apple-silicon.dmg';
 const dmgIntel = '/Bubo-intel.dmg';
 
@@ -93,9 +97,10 @@ const tiers = [
       <span class="mb-read"><b>CPU</b> 22%&nbsp;&nbsp;<b>RAM</b> 78%</span>
     </a>
     <nav class="mb-nav">
-      <a href="#features">Features</a>
-      <a href="#install">Install</a>
+      <a class="mb-sec" href="#features">Features</a>
+      <a class="mb-sec" href="#install">Install</a>
       <a href="/releases">Releases</a>
+      <a class="mb-in" href={app}>Sign&nbsp;in</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
@@ -310,6 +315,7 @@ const tiers = [
     <nav class="foot-links">
       <a href="#install">Download</a>
       <a href="/releases">Releases</a>
+      <a href={app}>Bubo ID</a>
     </nav>
     <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
   </footer>
@@ -409,6 +415,12 @@ const tiers = [
       color: var(--muted); transition: color 0.18s;
     }
     .mb-nav a:hover { color: var(--amber); }
+    /* the one nav item that leaves this site, so it carries a hairline of its own */
+    .mb-in {
+      color: var(--text); border: 1px solid var(--line);
+      border-radius: 7px; padding: 3px 10px; line-height: 1.5;
+    }
+    .mb-in:hover { border-color: var(--amber); }
     .mb-theme {
       font-family: var(--mono); font-size: 0.9rem; line-height: 1;
       background: none; border: 0; padding: 0; cursor: pointer;
@@ -705,6 +717,10 @@ const tiers = [
     @media (max-width: 520px) {
       body { font-size: 16px; }
       .mb-read { display: none; }
+      /* the two in-page anchors go first on a phone: they only scroll this same
+         page, and the hero already carries the download. Sign in cannot go,
+         since it is the only way to reach the dashboard at all. */
+      .mb-sec { display: none; }
       .grid { grid-template-columns: 1fr; }
       /* stack the download buttons full-width so they don't wrap ragged */
       .dl-row { flex-direction: column; align-items: stretch; }
