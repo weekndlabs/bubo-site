@@ -1,7 +1,8 @@
 ---
-const repo = 'https://github.com/fajarhide/bubo';
-const dmgArm = `${repo}/releases/latest/download/Bubo-apple-silicon.dmg`;
-const dmgIntel = `${repo}/releases/latest/download/Bubo-intel.dmg`;
+// Bubo ships from this site: the .dmg files live in public/ and are committed
+// per release, so only the newest entry carries download buttons.
+const dmgArm = '/Bubo-apple-silicon.dmg';
+const dmgIntel = '/Bubo-intel.dmg';
 
 // The real releases. Notes are written from what actually shipped, newest first.
 // change.k tags a diff (new / changed / fix); no k = a plain line (e.g. a first release).
@@ -10,11 +11,10 @@ const releases = [
     v: '1.4',
     date: '28 Jul 2026',
     latest: true,
-    tag: `${repo}/releases/tag/v1.4`,
     lede: 'The panel got out of its own way. It opens flat under the menu bar and as tall as the screen allows, and the readings inside it now say what they are measured against.',
     changes: [
       { k: 'new', t: 'Check for Updates in the right-click menu, comparing the latest release against the build you are running' },
-      { k: 'new', t: 'Report a bug opens a GitHub issue form with your Bubo build, chip, RAM and macOS version already filled in' },
+      { k: 'new', t: 'Report a bug opens a report form with your Bubo build, chip, RAM and macOS version already filled in' },
       { k: 'changed', t: 'Panel opens flat under the menu bar and as tall as the screen allows, instead of a fixed height that hid the lower half behind a scroll' },
       { k: 'changed', t: 'Efficiency and performance rows draw a bar per core and end in that tier\'s usage and speed; the separate core row is gone' },
       { k: 'changed', t: 'Fan reads against its own floor and ceiling, on a row under the temperatures' },
@@ -26,7 +26,6 @@ const releases = [
   {
     v: '1.3',
     date: '27 Jul 2026',
-    tag: `${repo}/releases/tag/v1.3`,
     lede: 'Bubo names the cause now. The panel used to show readings and leave the interpreting to you. It now says what is likely wrong and one thing to do about it, in a sentence.',
     changes: [
       { k: 'new', t: 'Diagnosis banner: the likely cause and one suggested action, in plain words' },
@@ -41,7 +40,6 @@ const releases = [
   {
     v: '1.2',
     date: '26 Jul 2026',
-    tag: `${repo}/releases/tag/v1.2`,
     lede: 'Clearer at a glance. Full-word CPU tiers, a plain-language throttling badge, and a memory bar that shows what your RAM is actually spent on.',
     changes: [
       { k: 'changed', t: 'CPU cores named efficiency / performance, one per row, with temp, hotspot and pressure under the bar' },
@@ -52,17 +50,14 @@ const releases = [
   {
     v: '1.1',
     date: '25 Jul 2026',
-    tag: `${repo}/releases/tag/v1.1`,
     lede: 'Intel is in. Bubo now ships a native build for Intel Macs alongside Apple Silicon.',
     changes: [
       { k: 'new', t: 'Native Intel build, Bubo-intel.dmg' },
-      { k: 'new', t: 'brew install picks Apple Silicon or Intel for your chip automatically' },
     ],
   },
   {
     v: '1.0',
     date: '24 Jul 2026',
-    tag: `${repo}/releases/tag/v1.0`,
     lede: 'First light. The whole panel in your menu bar, and one click to quit the app dragging your Mac.',
     changes: [
       { t: 'Top apps: the eight heaviest processes, grouped per app, one-click quit' },
@@ -112,7 +107,6 @@ const releases = [
       <a href="/#features">Features</a>
       <a href="/#install">Install</a>
       <a href="/releases" aria-current="page">Releases</a>
-      <a href={repo} rel="noopener">GitHub ↗</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
@@ -157,8 +151,6 @@ const releases = [
                 <a class="btn-dl btn-dl-alt" href={dmgIntel} download rel="noopener">Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
               </div>
             )}
-
-            <a class="rel-src" href={r.tag} rel="noopener">Notes on GitHub ↗</a>
           </div>
         </article>
       ))}
@@ -175,10 +167,9 @@ const releases = [
     </div>
     <nav class="foot-links">
       <a href="/">Home</a>
-      <a href={repo} rel="noopener">GitHub</a>
-      <a href={`${repo}/releases`} rel="noopener">Releases</a>
+      <a href="/#install">Download</a>
     </nav>
-    <p class="foot-legal">MIT © 2026 fajarhide · Apple Silicon and Intel</p>
+    <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
   </footer>
 
   <script>
@@ -338,13 +329,6 @@ const releases = [
     .dl-ext { font-size: 0.78em; opacity: 0.7; }
     .btn-dl-alt { background: none; color: var(--text); border-color: var(--line); }
     .btn-dl-alt:hover { background: none; border-color: var(--amber); color: var(--amber); }
-
-    .rel-src {
-      display: inline-block; margin-top: 16px;
-      font-family: var(--mono); font-size: 0.74rem; color: var(--faint);
-      text-decoration: none; transition: color 0.18s;
-    }
-    .rel-src:hover { color: var(--amber); }
 
     /* ---- footer (shared chrome) ---- */
     .footer {
