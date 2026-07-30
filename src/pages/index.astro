@@ -8,6 +8,11 @@ const version = '1.4';
 
 // Bubo ID, the signed-in half: it holds a Pro key and the Macs it runs on.
 // Downloading needs no account, so this is a quiet nav link and not a CTA.
+//
+// The label says Bubo ID rather than Sign in because this page cannot tell the
+// two apart. It is prerendered and served from a CDN, and the Clerk session
+// cookie belongs to app.bubo.weekndlabs.com, which the apex domain cannot read.
+// A neutral word is true either way; "Sign in" was wrong for anyone already in.
 const app = 'https://app.bubo.weekndlabs.com';
 const dmgArm = '/Bubo-apple-silicon.dmg';
 const dmgIntel = '/Bubo-intel.dmg';
@@ -100,7 +105,7 @@ const tiers = [
       <a class="mb-sec" href="#features">Features</a>
       <a class="mb-sec" href="#install">Install</a>
       <a href="/releases">Releases</a>
-      <a class="mb-in" href={app}>Sign&nbsp;in</a>
+      <a class="mb-in" href={app}>Bubo&nbsp;ID</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
