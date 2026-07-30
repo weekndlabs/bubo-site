@@ -1,0 +1,210 @@
+---
+import '../styles/tokens.css';
+
+// The shell for terms, refunds and privacy. Three pages with identical chrome
+// and nothing but prose between: a layout rather than the same 200 lines copied
+// three more times. index.astro and releases.astro keep their own copies; they
+// were written before this existed and changing them is not this page's job.
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  updated: string;
+}
+const { title, description, path, updated } = Astro.props;
+
+const app = 'https://app.bubo.weekndlabs.com';
+const url = `https://bubo.weekndlabs.com${path}`;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bubo — {title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={url} />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={url} />
+  <meta property="og:site_name" content="Bubo" />
+  <meta property="og:title" content={`Bubo — ${title}`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content="https://bubo.weekndlabs.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://bubo.weekndlabs.com/og.png" />
+  <meta name="theme-color" content="#12141F" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script is:inline>
+    const t = localStorage.getItem('bubo-theme');
+    if (t) document.documentElement.style.colorScheme = t;
+  </script>
+</head>
+<body>
+  <header class="menubar">
+    <a class="mb-brand" href="/" aria-label="Bubo, live readout">
+      <span class="mb-dot" aria-hidden="true"></span>
+      <span class="mb-read"><b>CPU</b> 22%&nbsp;&nbsp;<b>RAM</b> 78%</span>
+    </a>
+    <nav class="mb-nav">
+      <a class="mb-sec" href="/#features">Features</a>
+      <a class="mb-sec" href="/#install">Install</a>
+      <a href="/releases">Releases</a>
+      <a class="mb-in" href={app}>Account</a>
+      <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
+    </nav>
+  </header>
+
+  <main class="legal">
+    <p class="eyebrow">{title}</p>
+    <slot />
+    <p class="updated">Last updated {updated}</p>
+  </main>
+
+  <footer class="footer">
+    <div class="foot-brand">
+      <img src="/logo.png" alt="" width="40" height="40" />
+      <div>
+        <div class="foot-name">Bubo</div>
+        <p class="foot-tag">The genus of the eagle-owl. It watches all night and misses nothing.</p>
+      </div>
+    </div>
+    <nav class="foot-links">
+      <a href="/">Home</a>
+      <a href="/terms">Terms</a>
+      <a href="/refund">Refunds</a>
+      <a href="/privacy">Privacy</a>
+      <a href={app}>Account</a>
+    </nav>
+    <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
+  </footer>
+
+  <script>
+    // Theme toggle: flip color-scheme on <html> and remember it (shared with home).
+    (() => {
+      const root = document.documentElement;
+      const btn = document.querySelector('.mb-theme');
+      const media = matchMedia('(prefers-color-scheme: dark)');
+      const current = () => localStorage.getItem('bubo-theme') || (media.matches ? 'dark' : 'light');
+      const paint = () => { btn.textContent = current() === 'dark' ? '☾' : '☀'; };
+      paint();
+      media.addEventListener('change', paint);
+      btn?.addEventListener('click', () => {
+        const next = current() === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('bubo-theme', next);
+        root.style.colorScheme = next;
+        paint();
+      });
+    })();
+  </script>
+
+  <style is:global>
+    /* a reading column, same width as the changelog */
+    :root { --wrap: 760px; }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--night); color: var(--text);
+      font-family: var(--body); font-size: 17px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    h1, h2 { font-family: var(--display); letter-spacing: -0.02em; margin: 0; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--amber); margin: 0 0 1.1rem;
+    }
+
+    /* ---- menu bar (shared chrome) ---- */
+    .menubar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 34px; padding: 0 clamp(14px, 4vw, 40px);
+      background: light-dark(rgba(250, 248, 243, 0.72), rgba(18, 20, 31, 0.72));
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .mb-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .mb-dot {
+      width: 9px; height: 9px; border-radius: 50%; background: var(--amber);
+      box-shadow: 0 0 0 0 rgba(245, 184, 65, 0.5); animation: pulse 3.4s ease-out infinite;
+    }
+    .mb-read { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+    .mb-read b { color: var(--faint); font-weight: 500; }
+    .mb-nav { display: flex; align-items: center; gap: clamp(14px, 3vw, 28px); }
+    .mb-nav a {
+      font-family: var(--mono); font-size: 0.76rem; text-decoration: none;
+      color: var(--muted); transition: color 0.18s;
+    }
+    .mb-nav a:hover, .mb-nav a[aria-current="page"] { color: var(--amber); }
+    .mb-in {
+      color: var(--text); border: 1px solid var(--line);
+      border-radius: 7px; padding: 3px 10px; line-height: 1.5;
+    }
+    .mb-in:hover, .mb-nav a.mb-in:hover { border-color: var(--amber); color: var(--amber); }
+    .mb-theme {
+      font-family: var(--mono); font-size: 0.9rem; line-height: 1;
+      background: none; border: 0; padding: 0; cursor: pointer;
+      color: var(--muted); transition: color 0.18s;
+    }
+    .mb-theme:hover { color: var(--amber); }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 184, 65, 0.45); }
+      70% { box-shadow: 0 0 0 7px rgba(245, 184, 65, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 184, 65, 0); }
+    }
+
+    /* ---- the page itself ---- */
+    .legal {
+      max-width: var(--wrap); margin: 0 auto;
+      padding: clamp(40px, 8vw, 80px) clamp(20px, 5vw, 40px) clamp(48px, 8vw, 88px);
+    }
+    .legal h1 { font-weight: 800; font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1.05; }
+    .legal h2 { font-weight: 700; font-size: 1.25rem; margin: 2.4rem 0 0; }
+    .legal p { color: var(--muted); margin: 1rem 0; max-width: 62ch; }
+    .legal .lede { font-size: 1.1rem; margin-top: 1.4rem; }
+    .legal strong { color: var(--text); font-weight: 600; }
+    .legal a { color: var(--amber); }
+    .updated {
+      font-family: var(--mono); font-size: 0.74rem; color: var(--faint);
+      margin-top: 3rem !important; padding-top: 1.4rem;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    /* ---- footer (shared chrome) ---- */
+    .footer {
+      max-width: var(--wrap); margin: 0 auto;
+      padding: clamp(36px, 6vw, 56px) clamp(20px, 5vw, 40px);
+      border-top: 1px solid var(--line-soft);
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 28px; flex-wrap: wrap;
+    }
+    .foot-brand { display: flex; gap: 14px; align-items: center; max-width: 380px; }
+    .foot-brand img { border-radius: 10px; }
+    .foot-name { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+    .foot-tag { color: var(--faint); font-size: 0.86rem; margin: 3px 0 0; line-height: 1.45; }
+    .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .foot-links a { font-family: var(--mono); font-size: 0.82rem; text-decoration: none; color: var(--muted); transition: color 0.18s; }
+    .foot-links a:hover { color: var(--amber); }
+    .foot-legal { width: 100%; font-family: var(--mono); font-size: 0.72rem; color: var(--faint); margin: 8px 0 0; }
+
+    @media (max-width: 520px) {
+      body { font-size: 16px; }
+      .mb-read { display: none; }
+      .mb-sec { display: none; }
+    }
+
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</body>
+</html>

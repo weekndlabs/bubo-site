@@ -1,0 +1,55 @@
+---
+import Legal from '../layouts/Legal.astro';
+---
+
+<Legal
+  title="Privacy"
+  description="What Bubo stores about you, where it lives, and who else sees it. Downloading the app needs no account at all."
+  path="/privacy"
+  updated="30 July 2026"
+>
+  <h1>Privacy</h1>
+  <p class="lede">
+    Bubo itself runs on your Mac and does not need an account. An account exists
+    for one reason: to hold a Pro key and the Macs it is running on.
+  </p>
+
+  <h2>If you only download Bubo</h2>
+  <p>
+    Nothing. The downloads are open to anyone, signed in or not, and the app
+    does not ask you to register.
+  </p>
+
+  <h2>If you make an account</h2>
+  <p>
+    Accounts are handled by Clerk, which stores your email address and whatever
+    name you give it. Passwords never reach us; Clerk holds them.
+  </p>
+  <p>
+    Against that account we store your plan, your license key, and the Macs the
+    key has been activated on. That is the whole record.
+  </p>
+
+  <h2>If you buy Pro</h2>
+  <p>
+    Payment is taken by Paddle, who are the merchant of record. Card details go
+    to Paddle and never touch our servers; we never see them. Paddle tells us
+    that a payment completed and which account it belongs to, and we issue the
+    key from that.
+  </p>
+
+  <h2>Who else gets your data</h2>
+  <p>
+    Clerk, for accounts. Paddle, for payments. Vercel, which hosts these sites
+    and keeps ordinary server logs, and Vercel Analytics, which counts page
+    views on this site without cookies or cross-site tracking. Nobody else, and
+    none of it is sold or used for advertising.
+  </p>
+
+  <h2>Deleting it</h2>
+  <p>
+    Email <a href="mailto:support@weekndlabs.com">support@weekndlabs.com</a> and
+    we will delete your account and everything stored against it. If you want a
+    copy of that record first, ask and we will send it.
+  </p>
+</Legal>

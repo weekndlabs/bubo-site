@@ -172,6 +172,9 @@ const releases = [
     <nav class="foot-links">
       <a href="/">Home</a>
       <a href="/#install">Download</a>
+      <a href="/terms">Terms</a>
+      <a href="/refund">Refunds</a>
+      <a href="/privacy">Privacy</a>
       <a href={app}>Account</a>
     </nav>
     <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
@@ -335,7 +338,7 @@ const releases = [
     .foot-brand img { border-radius: 10px; }
     .foot-name { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
     .foot-tag { color: var(--faint); font-size: 0.86rem; margin: 3px 0 0; line-height: 1.45; }
-    .foot-links { display: flex; gap: 22px; }
+    .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
     .foot-links a { font-family: var(--mono); font-size: 0.82rem; text-decoration: none; color: var(--muted); transition: color 0.18s; }
     .foot-links a:hover { color: var(--amber); }
     .foot-legal { width: 100%; font-family: var(--mono); font-size: 0.72rem; color: var(--faint); margin: 8px 0 0; }
