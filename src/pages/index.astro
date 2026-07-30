@@ -9,10 +9,14 @@ const version = '1.4';
 // Bubo ID, the signed-in half: it holds a Pro key and the Macs it runs on.
 // Downloading needs no account, so this is a quiet nav link and not a CTA.
 //
-// The label says Bubo ID rather than Sign in because this page cannot tell the
-// two apart. It is prerendered and served from a CDN, and the Clerk session
-// cookie belongs to app.bubo.weekndlabs.com, which the apex domain cannot read.
-// A neutral word is true either way; "Sign in" was wrong for anyone already in.
+// The label is neutral because this page cannot tell a signed-in visitor from a
+// stranger: it is prerendered and served from a CDN, and the Clerk session cookie
+// belongs to app.bubo.weekndlabs.com, which the apex domain is not allowed to
+// read. "Sign in" was wrong for anyone already signed in.
+//
+// "Account" rather than "Bubo ID": the destination still calls itself Bubo ID,
+// the way an Apple ID is reached from a link that says Account, but a stranger
+// has to learn the brand's vocabulary before Bubo ID means anything to them.
 const app = 'https://app.bubo.weekndlabs.com';
 const dmgArm = '/Bubo-apple-silicon.dmg';
 const dmgIntel = '/Bubo-intel.dmg';
@@ -105,7 +109,7 @@ const tiers = [
       <a class="mb-sec" href="#features">Features</a>
       <a class="mb-sec" href="#install">Install</a>
       <a href="/releases">Releases</a>
-      <a class="mb-in" href={app}>Bubo&nbsp;ID</a>
+      <a class="mb-in" href={app}>Account</a>
       <button class="mb-theme" type="button" aria-label="Toggle light or dark theme">☾</button>
     </nav>
   </header>
@@ -320,7 +324,7 @@ const tiers = [
     <nav class="foot-links">
       <a href="#install">Download</a>
       <a href="/releases">Releases</a>
-      <a href={app}>Bubo ID</a>
+      <a href={app}>Account</a>
     </nav>
     <p class="foot-legal">© 2026 fajarhide · Apple Silicon and Intel</p>
   </footer>
