@@ -1,11 +1,9 @@
 ---
 import '../styles/tokens.css';
 
-// Bubo ships from this site: the .dmg files live in public/ and are committed
-// per release, so only the newest entry carries download buttons.
+// Only the newest entry carries a download button, and it goes to the account,
+// which lists the builds once someone is signed in.
 const app = 'https://app.bubo.weekndlabs.com';
-const dmgArm = '/Bubo-apple-silicon.dmg';
-const dmgIntel = '/Bubo-intel.dmg';
 
 // The real releases, newest first. One sentence on what the version is for, then
 // the few changes someone would notice. Short on purpose: this page answers "what
@@ -144,8 +142,7 @@ const releases = [
 
             {r.download && (
               <div class="rel-dl">
-                <a class="btn-dl" href={dmgArm} download rel="noopener">Apple&nbsp;Silicon <span class="dl-ext">.dmg</span></a>
-                <a class="btn-dl btn-dl-alt" href={dmgIntel} download rel="noopener">Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
+                <a class="btn-dl" href={app}>Sign in to download</a>
               </div>
             )}
           </div>
@@ -300,9 +297,6 @@ const releases = [
     }
     .btn-dl:hover { background: var(--amber-bright); }
     .btn-dl:active { transform: translateY(1px); }
-    .dl-ext { font-size: 0.78em; opacity: 0.7; }
-    .btn-dl-alt { background: none; color: var(--text); border-color: var(--line); }
-    .btn-dl-alt:hover { background: none; border-color: var(--amber); color: var(--amber); }
 
     /* ---- footer (shared chrome) ---- */
     .footer {
