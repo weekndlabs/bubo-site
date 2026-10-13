@@ -7,67 +7,69 @@ const app = 'https://app.bubo.weekndlabs.com';
 const dmgArm = '/Bubo-apple-silicon.dmg';
 const dmgIntel = '/Bubo-intel.dmg';
 
-// The real releases. Notes are written from what actually shipped, newest first.
-// change.k tags a diff (new / changed / fix); no k = a plain line (e.g. a first release).
+// The real releases, newest first. One sentence on what the version is for, then
+// the few changes someone would notice. Short on purpose: this page answers "what
+// is new and should I update", and the long form of each line did not help.
 const releases = [
   {
-    v: '1.4',
-    date: '28 Jul 2026',
+    v: '1.5',
+    date: '13 Oct 2026',
     latest: true,
-    lede: 'The panel got out of its own way. It opens flat under the menu bar and as tall as the screen allows, and the readings inside it now say what they are measured against.',
+    lede: 'Bubo names the right app, and the panel is easier to read.',
     changes: [
-      { k: 'new', t: 'Check for Updates in the right-click menu, comparing the latest release against the build you are running' },
-      { k: 'new', t: 'Report a bug opens a report form with your Bubo build, chip, RAM and macOS version already filled in' },
-      { k: 'changed', t: 'Panel opens flat under the menu bar and as tall as the screen allows, instead of a fixed height that hid the lower half behind a scroll' },
-      { k: 'changed', t: 'Efficiency and performance rows draw a bar per core and end in that tier\'s usage and speed; the separate core row is gone' },
-      { k: 'changed', t: 'Fan reads against its own floor and ceiling, on a row under the temperatures' },
-      { k: 'changed', t: 'Memory leads with used against total, and DRAM bandwidth moved above the bar, out of the app / wired / compressed / cached list' },
-      { k: 'changed', t: 'Power rails split the draw by rail on their own bar, next to battery' },
+      'Storage: used and free space on your startup disk',
+      'Helper processes count under the app that owns them',
+      'Darker labels that read in light mode',
+      'Quit and Activity Monitor stay on screen on small displays',
+      'Pro: licence activation, seven days of history, day and week charts',
     ],
     download: true,
   },
   {
+    v: '1.4',
+    date: '28 Jul 2026',
+    lede: 'The panel opens flat under the menu bar, as tall as your screen allows.',
+    changes: [
+      'Check for Updates and Report a bug in the right-click menu',
+      'A bar per core in the efficiency and performance rows',
+      'Fan speed shown against its floor and ceiling',
+      'Power rails split by rail, next to battery',
+    ],
+  },
+  {
     v: '1.3',
     date: '27 Jul 2026',
-    lede: 'Bubo names the cause now. The panel used to show readings and leave the interpreting to you. It now says what is likely wrong and one thing to do about it, in a sentence.',
+    lede: 'Bubo names the likely cause and one thing to do about it.',
     changes: [
-      { k: 'new', t: 'Diagnosis banner: the likely cause and one suggested action, in plain words' },
-      { k: 'new', t: 'System uptime in the panel header' },
-      { k: 'changed', t: 'Panel draws a solid background instead of the popover material' },
-      { k: 'fix', t: 'Memory matches Activity Monitor, per app and system used' },
-      { k: 'fix', t: 'Battery shows the charge macOS shows, not the raw mAh ratio' },
-      { k: 'fix', t: 'A busy app in front no longer hides a runaway in the background' },
-      { k: 'fix', t: 'Memory pressure follows the OS verdict instead of two guessed thresholds' },
+      'Diagnosis banner in plain words',
+      'Uptime in the panel header',
+      'Memory and battery match what macOS shows',
     ],
   },
   {
     v: '1.2',
     date: '26 Jul 2026',
-    lede: 'Clearer at a glance. Full-word CPU tiers, a plain-language throttling badge, and a memory bar that shows what your RAM is actually spent on.',
+    lede: 'Clearer at a glance.',
     changes: [
-      { k: 'changed', t: 'CPU cores named efficiency / performance, one per row, with temp, hotspot and pressure under the bar' },
-      { k: 'changed', t: 'Status badge reads throttling in plain words when the Mac runs hot, not "thermal serious"' },
-      { k: 'new', t: 'Memory broken down into app, wired, compressed, cached and free' },
+      'CPU tiers named efficiency and performance',
+      'Memory split into app, wired, compressed, cached and free',
+      'A plain "throttling" badge when the Mac runs hot',
     ],
   },
   {
     v: '1.1',
     date: '25 Jul 2026',
-    lede: 'Intel is in. Bubo now ships a native build for Intel Macs alongside Apple Silicon.',
-    changes: [
-      { k: 'new', t: 'Native Intel build, Bubo-intel.dmg' },
-    ],
+    lede: 'A native build for Intel Macs.',
+    changes: [],
   },
   {
     v: '1.0',
     date: '24 Jul 2026',
-    lede: 'First light. The whole panel in your menu bar, and one click to quit the app dragging your Mac.',
+    lede: 'First release.',
     changes: [
-      { t: 'Top apps: the eight heaviest processes, grouped per app, one-click quit' },
-      { t: 'CPU, memory, GPU and fan, battery, network and disk' },
-      { t: 'Power rails and temperatures on Apple Silicon' },
-      { t: 'Purge disk cache, or quit every heavy app at once' },
-      { t: 'Native Apple Silicon, no daemon, no sudo' },
+      'Top apps, grouped per app, with one-click quit',
+      'CPU, memory, GPU, fan, battery, network and disk',
+      'Power rails and temperatures on Apple Silicon',
     ],
   },
 ];
@@ -78,14 +80,14 @@ const releases = [
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bubo — releases</title>
+  <title>Bubo releases</title>
   <meta name="description" content="Every Bubo release, logged. What changed in each build, newest first, and where to download it for Apple Silicon or Intel." />
   <link rel="canonical" href="https://bubo.weekndlabs.com/releases" />
   <link rel="icon" type="image/png" href="/logo.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bubo.weekndlabs.com/releases" />
   <meta property="og:site_name" content="Bubo" />
-  <meta property="og:title" content="Bubo — releases" />
+  <meta property="og:title" content="Bubo releases" />
   <meta property="og:description" content="Every Bubo release, logged. Newest first, with the download for your chip." />
   <meta property="og:image" content="https://bubo.weekndlabs.com/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -117,12 +119,8 @@ const releases = [
 
   <main>
     <section class="rel-hero">
-      <p class="eyebrow">changelog</p>
-      <h1>Every build, logged.</h1>
-      <p class="lede">
-        {releases.length} releases so far, newest first. Bubo watches all night;
-        this is what it shipped. Grab the latest for Apple&nbsp;Silicon or Intel.
-      </p>
+      <h1>Releases</h1>
+      <p class="lede">What changed in each version, newest first.</p>
     </section>
 
     <section class="timeline">
@@ -138,16 +136,11 @@ const releases = [
 
             <p class="rel-lede">{r.lede}</p>
 
-            <ul class="rel-log">
-              {r.changes.map((c) => (
-                <li class="rel-row">
-                  {c.k
-                    ? <span class:list={['rel-tag', `rel-tag--${c.k}`]}>{c.k}</span>
-                    : <span class="rel-bullet" aria-hidden="true">·</span>}
-                  <span>{c.t}</span>
-                </li>
-              ))}
-            </ul>
+            {r.changes.length > 0 && (
+              <ul class="rel-log">
+                {r.changes.map((c) => <li>{c}</li>)}
+              </ul>
+            )}
 
             {r.download && (
               <div class="rel-dl">
@@ -214,10 +207,6 @@ const releases = [
     a { color: inherit; }
     h1 { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; margin: 0; }
     em { font-style: normal; color: var(--amber); }
-    .eyebrow {
-      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.22em;
-      text-transform: uppercase; color: var(--amber); margin: 0 0 1.1rem;
-    }
 
     /* ---- menu bar (shared chrome) ---- */
     .menubar {
@@ -285,7 +274,7 @@ const releases = [
       position: absolute; left: 0; top: 7px; width: 13px; height: 13px; border-radius: 50%;
       background: var(--faint); box-shadow: 0 0 0 4px var(--night);
     }
-    .is-latest .rel-dot { background: var(--amber); animation: pulse 3.4s ease-out infinite; }
+    .is-latest .rel-dot { background: var(--amber); }
 
     .rel-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .rel-ver { font-family: var(--display); font-weight: 700; font-size: 1.5rem; letter-spacing: -0.01em; }
@@ -297,20 +286,9 @@ const releases = [
     }
     .rel-lede { color: var(--muted); font-size: 1.02rem; margin: 12px 0 0; max-width: 56ch; }
 
-    .rel-log { list-style: none; margin: 16px 0 0; padding: 0; }
-    .rel-row {
-      display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 12px;
-      padding: 6px 0; font-size: 0.96rem; color: var(--text);
-    }
-    .rel-tag {
-      justify-self: start; font-family: var(--mono); font-size: 0.58rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
-      transform: translateY(-1px);
-    }
-    .rel-tag--new { color: var(--sage); background: color-mix(in srgb, var(--sage) 15%, transparent); }
-    .rel-tag--fix { color: var(--clay); background: color-mix(in srgb, var(--clay) 15%, transparent); }
-    .rel-tag--changed { color: var(--amber); background: rgba(245, 184, 65, 0.13); }
-    .rel-bullet { color: var(--faint); font-family: var(--mono); }
+    .rel-log { margin: 12px 0 0; padding: 0 0 0 1.1em; font-size: 0.96rem; color: var(--text); }
+    .rel-log li { padding: 3px 0; }
+    .rel-log li::marker { color: var(--faint); }
 
     .rel-dl { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; max-width: 440px; }
     .btn-dl {
@@ -350,6 +328,7 @@ const releases = [
       .mb-read { display: none; }
       .mb-sec { display: none; }
       .rel-dl { flex-direction: column; align-items: stretch; max-width: none; }
+      .rel-dl .btn-dl { flex: none; }
     }
 
     :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
