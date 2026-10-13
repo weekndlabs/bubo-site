@@ -2,12 +2,16 @@
 import Analytics from '@vercel/analytics/astro';
 import '../styles/tokens.css';
 
-// Bubo ships from this site. The .dmg files live in public/ and are committed
-// per release, so a new version means replacing both files and this number.
-const version = '1.4';
+// The .dmg files live in public/ and are committed per release, so a new version
+// means replacing both files and this number. This page does not link to them:
+// downloading goes through the account, which lists the two builds once someone
+// is signed in.
+// ponytail: the files are still served from here, so their URLs work for anyone
+// who has them. Serve them from the account app if the sign-in has to hold.
+const version = '1.5';
 
-// Bubo ID, the signed-in half: it holds a Pro key and the Macs it runs on.
-// Downloading needs no account, so this is a quiet nav link and not a CTA.
+// Bubo ID, the signed-in half: it holds the downloads, a Pro key and the Macs it
+// runs on. An unsigned visitor who follows a link there lands on sign-in first.
 //
 // The label is neutral because this page cannot tell a signed-in visitor from a
 // stranger: it is prerendered and served from a CDN, and the Clerk session cookie
@@ -18,8 +22,6 @@ const version = '1.4';
 // the way an Apple ID is reached from a link that says Account, but a stranger
 // has to learn the brand's vocabulary before Bubo ID means anything to them.
 const app = 'https://app.bubo.weekndlabs.com';
-const dmgArm = '/Bubo-apple-silicon.dmg';
-const dmgIntel = '/Bubo-intel.dmg';
 
 // The real sections of the app, used verbatim as the feature list.
 // arch: 'all' runs on Intel too; 'as' needs the private Apple Silicon sensors.
@@ -129,17 +131,16 @@ const tiers = [
         </p>
 
         <div class="hero-actions">
-          <a class="btn-dl" href={dmgArm} download>Apple&nbsp;Silicon <span class="dl-ext">.dmg</span></a>
-          <a class="btn-dl btn-dl-alt" href={dmgIntel} download>Intel&nbsp;Chip <span class="dl-ext">.dmg</span></a>
+          <a class="btn-dl" href={app}>Sign in to download</a>
         </div>
-        <p class="dl-hint">Version {version}. Apple Silicon for M1 through M5. Intel for older Macs.</p>
+        <p class="dl-hint">Version {version}, free with an account. Apple Silicon and Intel.</p>
       </div>
 
       <!-- Signature: a working recreation of the Bubo panel, culprit in red. -->
       <div class="panel-wrap">
         <div class="panel" role="img" aria-label="The Bubo panel, naming Google Chrome as the reason memory is tight and suggesting you quit it">
           <div class="p-head">
-            <div class="p-title">Bubo <span class="p-ver">1.4</span></div>
+            <div class="p-title">Bubo <span class="p-ver">1.5</span></div>
             <div class="p-badge">BUSY&nbsp;·&nbsp;RAM 78%</div>
           </div>
           <div class="p-sub">M1 · 8 cores · up 4h 12m</div>
@@ -297,16 +298,12 @@ const tiers = [
       </div>
 
       <div class="dl-row">
-        <a class="btn-dl" href={dmgArm} download>
-          Apple&nbsp;Silicon <span class="dl-ext">.dmg · M1–M5</span>
-        </a>
-        <a class="btn-dl btn-dl-alt" href={dmgIntel} download>
-          Intel&nbsp;Chip <span class="dl-ext">.dmg</span>
-        </a>
+        <a class="btn-dl" href={app}>Sign in to download</a>
       </div>
 
       <p class="install-note">
-        Version {version}. Open the .dmg and drag Bubo to Applications. macOS
+        Version {version}. Sign in, pick the build for your Mac, then open the
+        .dmg and drag Bubo to Applications. macOS
         quarantines anything downloaded from the web, so the first launch is
         <b>right-click, then Open</b>, once. After that it opens normally.
       </p>
@@ -689,10 +686,7 @@ const tiers = [
     }
     .btn-dl:hover { background: var(--amber-bright); }
     .btn-dl:active { transform: translateY(1px); }
-    .dl-ext { font-size: 0.78em; opacity: 0.7; }
     /* Intel is the secondary arch: ghost button so Apple Silicon reads as primary. */
-    .btn-dl-alt { background: none; color: var(--text); border-color: var(--line); }
-    .btn-dl-alt:hover { background: none; border-color: var(--amber); color: var(--amber); }
     .install-note { color: var(--muted); font-size: 0.98rem; margin: 24px auto 0; max-width: 54ch; }
     .install-note a { color: var(--amber); text-decoration: none; border-bottom: 1px solid rgba(245,184,65,0.3); }
     .install-note b { color: var(--text); font-weight: 600; }
