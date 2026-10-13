@@ -4,10 +4,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
+  /* Relative paths, because this file is rendered straight off disk over file://
+     rather than served. Same woff2 files the site ships, so regenerating the card
+     no longer needs a network. */
+  @font-face {
+    font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800;
+    src: url('../public/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600;
+    src: url('../public/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  }
   :root {
     --night: #12141F; --night-2: #1A1D2B; --line: #2A3048;
     --amber: #F5B841; --sage: #6BCC8F; --clay: #E0776F;
