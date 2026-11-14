@@ -9,21 +9,14 @@ npm run dev      # http://localhost:4321
 npm run build    # -> dist/
 ```
 
-## Deploy to Vercel
+## Deploy
 
-No config needed — Vercel detects Astro and builds `dist/`.
-
-**From the CLI:**
+Cloudflare Workers static assets, configured in `wrangler.jsonc`:
 
 ```sh
-npm i -g vercel
-vercel           # preview
-vercel --prod    # production
+npm run build
+npx wrangler deploy
 ```
-
-**From GitHub:** push this folder to a repo, then import it at
-[vercel.com/new](https://vercel.com/new). Framework preset: Astro (auto). Build
-command `astro build`, output `dist/`.
 
 ## Editing
 
